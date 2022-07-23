@@ -29,7 +29,7 @@ export class GoogleClient {
     return google;
   }
 
-  static async getClient(): Promise<Auth.OAuth2Client> {
+  static async getClient(): Promise<Auth.OAuth2Client | void> {
     if (this.client) return this.client;
 
     const credentials = await fs.readFile(process.cwd()+'/creds/google_creds.json').catch(e => console.error('No creds file, getting from env'))
@@ -44,7 +44,7 @@ export class GoogleClient {
           scope: scopes.join(' ')
         });
         console.log(authUrl);
-        if (process.env.google_creds) return console.error('Please authenticate your Google Account.');
+        if (process.env.google_creds) return resolve(console.error('Please authenticate your Google Account.'));
 
         const rl = readline.createInterface({
           input: process.stdin,
