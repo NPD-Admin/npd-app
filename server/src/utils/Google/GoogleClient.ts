@@ -32,7 +32,8 @@ export class GoogleClient {
   static async getClient(): Promise<Auth.OAuth2Client> {
     if (this.client) return this.client;
 
-    const credentials = await fs.readFile(process.cwd()+'/creds/google_creds.json').catch(console.error) || process.env.google_creds as string;
+    const credentials = await fs.readFile(process.cwd()+'/creds/google_creds.json').catch(e => console.error('No creds file, getting from env'))
+      || process.env.google_creds as string;
     const { client_secret, client_id, redirect_uris } = JSON.parse(credentials.toString()).installed;
     const oAuth2Client = this.client = new Auth.OAuth2Client({ clientId: client_id, clientSecret: client_secret, redirectUri: redirect_uris[0]});
     return new Promise(async (resolve, reject) => {
