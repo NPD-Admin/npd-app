@@ -20,7 +20,7 @@ export class GoogleClient {
   static get google() { return (this.client && google) || 'Not ready' };
   static async login(): Promise<GoogleApis | void> {
     const result = await this.getClient();
-    if (result instanceof Error) return console.error(result.message);
+    if (!(result instanceof Auth.OAuth2Client)) return;
     const profile = await google.people('v1').people.get({
       resourceName: 'people/me',
       personFields: 'emailAddresses,names'
