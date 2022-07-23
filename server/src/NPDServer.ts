@@ -41,11 +41,11 @@ export class NPDServer {
 
     app.get('/widgets/:page?', (req, res) => {
       if (!req.params.page) {
-        const fileList = readdirSync(path.join(__dirname, '../views/pages'), { withFileTypes: true });
+        const fileList = readdirSync(path.join(__dirname, '../views/pages/widgets'), { withFileTypes: true });
         const widgetList = fileList.map(file => {
           if (file.isDirectory()) return null;
           if (file.name === 'index.ejs') return null;
-          return ({ name: file.name });
+          return ({ name: file.name.split('.')[0] });
         }).filter(w => w);
         res.render('pages/index', { widgetList });
       } else res.render(`pages/widget`, { page: req.params.page });
