@@ -18,8 +18,9 @@ const scopes = [
 export class GoogleClient {
   static client: Auth.OAuth2Client;
   static get google() { return (this.client && google) || 'Not ready' };
-  static async login(): Promise<GoogleApis> {
-    await this.getClient();
+  static async login(): Promise<GoogleApis | void> {
+    const result = await this.getClient();
+    if (result instanceof Error) return console.error(result.message);
     const profile = await google.people('v1').people.get({
       resourceName: 'people/me',
       personFields: 'emailAddresses,names'
