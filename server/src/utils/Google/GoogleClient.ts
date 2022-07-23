@@ -44,7 +44,8 @@ export class GoogleClient {
           scope: scopes.join(' ')
         });
         console.log(authUrl);
-        if (process.env.google_creds) return resolve(console.error('Please authenticate your Google Account.'));
+        if (process.env.google_creds)
+          return resolve(console.error('Please authenticate your Google Account then submit your code as a query string to {HOST}/oauth.'));
 
         const rl = readline.createInterface({
           input: process.stdin,

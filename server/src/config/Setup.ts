@@ -154,7 +154,6 @@ export default class Setup {
 
   private async displayStartupMessage(): Promise<void> {
     console.log(blueLog`...NPD Bot Setup Completed.`);
-    await GoogleClient.login();
 
     const guilds = await this.client.guilds.fetch();
     const guildCount = `\nBot Logged into (${guilds.size}) Guilds:`;
@@ -164,5 +163,6 @@ export default class Setup {
     console.log(`${Array.from(guilds.map(guild => `(${guild.id}) ${guild.name}`)).join('\n')}\n`);
   
     console.log(blueLog`Ready...\n\n\n`);
+    await GoogleClient.login();
   }
 }
