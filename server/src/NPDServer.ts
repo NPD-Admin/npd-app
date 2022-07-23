@@ -3,6 +3,7 @@ import express, { Express, Request, Response } from 'express';
 import { readdirSync } from 'fs';
 import path, { join } from 'path';
 import { NPDBot } from './NPDBot';
+import { GoogleClient } from './utils/Google/GoogleClient';
 
 export class NPDServer {
   static start(botInstance: NPDBot): void {
@@ -23,6 +24,11 @@ export class NPDServer {
 
     app.get('/api', (req, res) => {
       res.json({ version: '0.1.0'});
+    });
+
+    app.get('/oauth', async (req, res) => {
+      await GoogleClient.validateCode(req.query.code as string).catch(res.json);
+      res.send('Authenticated.');
     });
 
     app.get('/widgets/widget/:widgetName', (req, res) => {

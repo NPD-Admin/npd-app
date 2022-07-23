@@ -31,9 +31,9 @@ export class GoogleClient {
   static async getClient(): Promise<Auth.OAuth2Client | Error> {
     if (this.client) return this.client;
 
-    const credentials = await fs.readFile(process.cwd()+'/creds/google_creds.json');
+    const credentials = await fs.readFile(process.cwd()+'/creds/google_creds.json').catch(console.error) || process.env.google_creds as string;
     const { client_secret, client_id, redirect_uris } = JSON.parse(credentials.toString()).installed;
-    const oAuth2Client = new Auth.OAuth2Client({ clientId: client_id, clientSecret: client_secret, redirectUri: redirect_uris[0]});
+    const oAuth2Client = this.client = new Auth.OAuth2Client({ clientId: client_id, clientSecret: client_secret, redirectUri: redirect_uris[0]});
     return new Promise(async (resolve, reject) => {
       const token = await fs.readFile(process.cwd()+'/creds/google_token.json').catch(e => {
         console.log('Token not found.  Please authenticate to generate a new token.\n');
@@ -42,6 +42,7 @@ export class GoogleClient {
           scope: scopes.join(' ')
         });
         console.log(authUrl);
+        if (!(redirect_uris[0] as string).includes('urn:ietf:wg:oauth:2.0:oob')) return new Error('Please authenticate your Google Account.');
 
         const rl = readline.createInterface({
           input: process.stdin,
@@ -52,7 +53,6 @@ export class GoogleClient {
           const token = await oAuth2Client.getToken(code);
           oAuth2Client.setCredentials(token.tokens);
           await fs.writeFile(process.cwd()+'/creds/google_token.json', JSON.stringify(token, null, 2));
-          this.client = oAuth2Client;
           google.options({ auth: oAuth2Client });
           await this.testMailer();
           resolve(this.client);
@@ -68,12 +68,20 @@ export class GoogleClient {
           resolve(await this.getClient());
         } else {
           oAuth2Client.setCredentials(tokenData.tokens);
-          this.client = oAuth2Client;
           google.options({ auth: oAuth2Client });
           resolve(this.client);
         }
       }
     });
+  }
+
+  static async validateCode(code: string): Promise<Auth.OAuth2Client> {
+    const token = await this.client.getToken(code);
+    this.client.setCredentials(token.tokens);
+    await fs.writeFile(process.cwd()+'/creds/google_token.json', JSON.stringify(token, null, 2));
+    google.options({ auth: this.client });
+    await this.testMailer();
+    return this.client;
   }
 
   static async testMailer(): Promise<Error | string> {
