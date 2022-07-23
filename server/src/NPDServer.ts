@@ -29,7 +29,8 @@ export class NPDServer {
     app.get('/oauth', async (req, res) => {
       console.log(req.query);
       await GoogleClient.validateCode(req.query.code as string).catch(e => res.json(e));
-      res.send('Authenticated.');
+      if (!res.headersSent)
+        res.send('Authenticated.');
     });
 
     app.get('/widgets/widget/:widgetName', (req, res) => {

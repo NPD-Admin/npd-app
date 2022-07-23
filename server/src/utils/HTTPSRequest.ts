@@ -1,3 +1,4 @@
+import { OutgoingHttpHeaders } from 'http';
 import { request } from 'https';
 
 export class HTTPSRequest {
@@ -13,12 +14,10 @@ export class HTTPSRequest {
     });
   }
 
-  static httpsPayloadRequest(method: string, url: string, payload: any): Promise<Buffer> {
+  static httpsPayloadRequest(method: string, url: string, payload: any, headers: OutgoingHttpHeaders = {}): Promise<Buffer> {
     return new Promise((resolve, reject) => {
-      const req = request({
-        method: method,
-        href: url
-      }, response => {
+
+      const req = request(url, { method, headers }, response => {
         const chunks: Buffer[] = [];
         response.on('data', data => chunks.push(data));
         response.on('error', reject);

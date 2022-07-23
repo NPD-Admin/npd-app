@@ -26,6 +26,7 @@ import { DiscordUtils } from "../../utils/DiscordUtils";
 import { GeoLookup } from "../../utils/GeoLookup";
 import { GoogleClient } from "../../utils/Google/GoogleClient";
 import { Mailer } from "../../utils/Mailer";
+import { MailerLite } from "../../utils/MailerLite";
 import {
   Collection,
   WithId,
@@ -64,7 +65,8 @@ type OnboardingConfig = {
   completedRoleId: Snowflake,
   manageRoleId: Snowflake,
   guestRoleId: Snowflake,
-  promptTime: string
+  promptTime: string,
+  mailerGroupId: string
 };
 
 export type OnboardingAsset = {
@@ -145,7 +147,7 @@ export abstract class Onboard {
       .find(asset => asset.fieldMapping.some(c => !Object.keys(memberRecord).includes(c) || !memberRecord[c]));
     if (!currentAsset) return console.error('No assets found:\n'+JSON.stringify(memberRecord, null, 2));
 
-    const handlerResult = await this.handleInteraction(payload, memberRecord, currentAsset);
+    const handlerResult = await this.handleInteraction(payload, memberRecord, currentAsset, onboardConfig);
     if (memberRecord.completed) {
       await guildMember.roles.add(onboardConfig.completedRoleId);
       await guildMember.roles.remove(onboardConfig.guestRoleId);
@@ -233,7 +235,7 @@ export abstract class Onboard {
     return guildMember;
   }
 
-  private async handleInteraction(payload: MemberResolvable, memberRecord: WithId<MemberRecord>, currentAsset: OnboardingAsset): Promise<Error[]> {
+  private async handleInteraction(payload: MemberResolvable, memberRecord: WithId<MemberRecord>, currentAsset: OnboardingAsset, config: OnboardingConfig): Promise<Error[]> {
     if (!(payload instanceof ButtonInteraction || payload instanceof ModalSubmitInteraction || payload instanceof SelectMenuInteraction)) return Promise.resolve([]);
     const errors = [] as Error[];
 
@@ -292,6 +294,7 @@ export abstract class Onboard {
 
       if (data.emailVerification === memberRecord.emailVerificationCode) {
         memberRecord.emailVerification = data.emailVerification;
+        await MailerLite.addGroupMember(config.mailerGroupId, memberRecord.email);
       } else errors.push(new Error('Your email verification code did not match.'))
 
       const smsNumberParts = PhoneNumberValidator.exec(data.sms);

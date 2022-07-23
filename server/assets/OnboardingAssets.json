@@ -8,7 +8,8 @@
     "completedRoleId": "989739791581065226",
     "manageRoleId": "988180886145081384",
     "guestRoleId": "815636524296962089",
-    "promptTime": "1845"
+    "promptTime": "1845",
+    "mailerGroupId": "61274307477636533"
   }, {
     "type": "OnboardingAsset",
     "guildId": "814614335229263945",
