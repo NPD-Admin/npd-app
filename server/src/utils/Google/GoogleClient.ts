@@ -3,6 +3,7 @@
 import { google, Auth, admin_directory_v1, gmail_v1, drive_v3, Common, GoogleApis } from 'googleapis';
 import * as fs from 'fs/promises';
 import readline from 'readline';
+import { constants } from 'fs';
 
 export { Common, admin_directory_v1 };
 const scopes = [
@@ -81,6 +82,7 @@ export class GoogleClient {
   static async validateCode(code: string): Promise<Auth.OAuth2Client> {
     const token = await this.client.getToken(code);
     this.client.setCredentials(token.tokens);
+    await fs.mkdir(process.cwd()+'/creds');
     await fs.writeFile(process.cwd()+'/creds/google_token.json', JSON.stringify(token, null, 2));
     google.options({ auth: this.client });
     await this.testMailer();
