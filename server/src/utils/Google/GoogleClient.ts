@@ -44,7 +44,7 @@ export class GoogleClient {
           scope: scopes.join(' ')
         });
         console.log(authUrl);
-        if (!(redirect_uris[0] as string).includes('urn:ietf:wg:oauth:2.0:oob')) return console.error('Please authenticate your Google Account.');
+        if (process.env.google_creds) return console.error('Please authenticate your Google Account.');
 
         const rl = readline.createInterface({
           input: process.stdin,
