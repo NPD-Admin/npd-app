@@ -29,7 +29,7 @@ export class GoogleClient {
     return google;
   }
 
-  static async getClient(): Promise<Auth.OAuth2Client | Error> {
+  static async getClient(): Promise<Auth.OAuth2Client> {
     if (this.client) return this.client;
 
     const credentials = await fs.readFile(process.cwd()+'/creds/google_creds.json').catch(console.error) || process.env.google_creds as string;
@@ -43,7 +43,7 @@ export class GoogleClient {
           scope: scopes.join(' ')
         });
         console.log(authUrl);
-        if (!(redirect_uris[0] as string).includes('urn:ietf:wg:oauth:2.0:oob')) return new Error('Please authenticate your Google Account.');
+        if (!(redirect_uris[0] as string).includes('urn:ietf:wg:oauth:2.0:oob')) return console.error('Please authenticate your Google Account.');
 
         const rl = readline.createInterface({
           input: process.stdin,
@@ -59,7 +59,7 @@ export class GoogleClient {
           resolve(this.client);
         });
       }) as Buffer;
-      if (token) {
+      if (token && token instanceof Buffer) {
         const tokenData = JSON.parse(token.toString()) as { tokens: Auth.Credentials, res: Common.GaxiosResponse };
         const tokenScopes = (tokenData.tokens.scope || '').split(' ');
         
