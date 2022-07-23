@@ -1,0 +1,36 @@
+{
+  "collection": "assets",
+  "data": [{
+    "type": "BotConfig",
+    "identifier": "BotConfig.814614335229263945",
+    "guildId": "814614335229263945",
+    "logChannelId": "822343177104261160"
+  }, {
+    "type": "PruningMessageAsset",
+    "identifier": "PruningMessageAsset.814614335229263945",
+    "guildId": "814614335229263945",
+    "msgJson": {
+      "embeds": [{
+        "title": "Thank you for visiting Non-Partisan Delaware",
+        "description": "Thank you for visiting Non-Partisan Delaware.\n\nOur bot automatically prunes Guests daily who have been inactive for more than 7 days without completing our onboarding process.  You are welcome to [rejoin at any time](https://discord.gg/j5nRAFZEuZ) if you have additional questions, and may complete the onboarding process at that time to avoid being pruned again in the future.",
+        "thumbnail": {
+          "url": "https://raw.githubusercontent.com/NPD-Admin/Non-Partisan-Delaware-Documents/main/Branding%20Assets/profile.png"
+        }
+      }]
+    }
+  }, {
+    "type": "OnboardingReminderAsset",
+    "identifier": "OnboardingReminderAsset.814614335229263945",
+    "guildId": "814614335229263945",
+    "onboardingChannelId": "814614335744639058",
+    "msgJson": {
+      "embeds": [{
+        "title": "REMINDER: Complete Onboarding",
+        "description": "Prospective members of Non-Partisan Delaware who wish to be considered for full membership, or who just want to be added to our contact lists to receive updates from NPD, must complete the Onboarding Process in $$onboardingChannel$$.  Guests who do not complete Onboarding will be removed after 7 days of inactivity.",
+        "thumbnail": {
+          "url": "https://raw.githubusercontent.com/NPD-Admin/Non-Partisan-Delaware-Documents/main/Branding%20Assets/profile.png"
+        }
+      }]
+    }
+  }]
+}

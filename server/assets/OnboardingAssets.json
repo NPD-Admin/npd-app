@@ -1,0 +1,281 @@
+{
+  "collection": "assets",
+  "data": [{
+    "type": "OnboardingConfig",
+    "identifier": "OnboardingConfig.814614335229263945",
+    "channelId": "814614335744639058",
+    "guildId": "814614335229263945",
+    "completedRoleId": "989739791581065226",
+    "manageRoleId": "988180886145081384",
+    "guestRoleId": "815636524296962089",
+    "promptTime": "1845"
+  }, {
+    "type": "OnboardingAsset",
+    "guildId": "814614335229263945",
+    "identifier": "OnboardingAsset.814614335229263945.0000",
+    "fieldMapping": ["started"],
+    "order": 0,
+    "msgJson": {
+      "embeds": [{
+        "title": "Welcome to the Non-Partisan Delaware Discord Server",
+        "description": "We host live events and streams, post announcements, organize campaigns, and conduct the business of governing Non-Partisan Delaware here, as well as welcoming and onboarding new volunteers and prospective members through the button below.\n\nIf you do not wish to volunteer or register for updates at this time, you are free to ignore this message and explore the public areas of our server, but your participation will be limited, and you are expected to conduct yourself as a guest in our online home.\n\n*Members in the $$guestRoleId$$ role will be automatically pruned daily after a week of inactivity.  You can apply for membership to get the $$completedRoleId$$ role, or you may [rejoin at any time](https://discord.gg/j5nRAFZEuZ).*\n\n*Disruptive behavior may result in restricted server permissions.*\n\n**Would you like to apply for membership?**",
+        "thumbnail": {
+          "url": "https://raw.githubusercontent.com/NPD-Admin/Non-Partisan-Delaware-Documents/main/Branding%20Assets/profile.png"
+        }
+      }],
+      "components": [{
+        "type": 1,
+        "components": [{
+          "type": 2,
+          "label": "Apply Now!",
+          "custom_id": "OnboardingAsset.814614335229263945.0000.started",
+          "style": 1
+        }, {
+          "type": 2,
+          "label": "Leave Server",
+          "custom_id": "OnboardingAsset.814614335229263945.0000.leave",
+          "style": 4
+        }]
+      }]
+    }
+  }, {
+    "type": "OnboardingAsset",
+    "guildId": "814614335229263945",
+    "identifier": "OnboardingAsset.814614335229263945.0001",
+    "fieldMapping": ["nickname", "legalAddress", "email"],
+    "order": 1,
+    "modalJson": {
+      "title": "NPD Onboarding: Basic Info",
+      "custom_id": "OnboardingAsset.814614335229263945.0001",
+      "components": [{
+        "type": 1,
+        "components": [{
+          "type": 4,
+          "label": "Name",
+          "custom_id": "OnboardingAsset.814614335229263945.0001.nickname",
+          "style": 1,
+          "placeholder": "Alex Doe"
+        }]
+      }, {
+        "type": 1,
+        "components": [{
+          "type": 4,
+          "label": "Address, including Full Legal Name",
+          "custom_id": "OnboardingAsset.814614335229263945.0001.legalAddress",
+          "style": 2,
+          "placeholder": "Alex Kennedy Doe\n123 E Main St, Apt B\nDover, DE 19901"
+        }]
+      }, {
+        "type": 1,
+        "components": [{
+          "type": 4,
+          "label": "Email Address",
+          "custom_id": "OnboardingAsset.814614335229263945.0001.email",
+          "style": 1,
+          "placeholder": "alex@NonPartisanDE.org"
+        }]
+      }]
+    }
+  }, {
+    "type": "OnboardingAsset",
+    "guildId": "814614335229263945",
+    "identifier": "OnboardingAsset.814614335229263945.0002",
+    "fieldMapping": ["emailVerified"],
+    "order": 2,
+    "msgJson": {
+      "embeds": [{
+        "title": "NPD Onboarding: Email Verification",
+        "description": "You are being sent an email containing a short verification code.  Click the button below when you receieve it.",
+        "thumbnail": {
+          "url": "https://raw.githubusercontent.com/NPD-Admin/Non-Partisan-Delaware-Documents/main/Branding%20Assets/profile.png"
+        }
+      }],
+      "components": [{
+        "type": 1,
+        "components": [{
+          "type": 2,
+          "label": "Verify Email",
+          "style": 1,
+          "custom_id": "OnboardingAsset.814614335229263945.0002.emailVerified"
+        }]
+      }]
+    }
+  }, {
+    "type": "OnboardingAsset",
+    "guildId": "814614335229263945",
+    "identifier": "OnboardingAsset.814614335229263945.0003",
+    "fieldMapping": ["emailVerification", "sms", "voice", "social"],
+    "order": 3,
+    "modalJson": {
+      "title": "NPD Onboarding: Contact Details",
+      "custom_id": "OnboardingAsset.814614335229263945.0003",
+      "components": [{
+        "type": 1,
+        "components": [{
+          "type": 4,
+          "label": "Email Verification Code",
+          "custom_id": "OnboardingAsset.814614335229263945.0003.emailVerification",
+          "style": 1,
+          "placeholder": "000000"
+        }]
+      }, {
+        "type": 1,
+        "components": [{
+          "type": 4,
+          "label": "Phone Number for SMS (Text)",
+          "custom_id": "OnboardingAsset.814614335229263945.0003.sms",
+          "style": 1,
+          "placeholder": "302.555.1212"
+        }]
+      }, {
+        "type": 1,
+        "components": [{
+          "type": 4,
+          "label": "Phone Number for Voice",
+          "custom_id": "OnboardingAsset.814614335229263945.0003.voice",
+          "style": 1,
+          "placeholder": "302.555.1212"
+        }]
+      }, {
+        "type": 1,
+        "components": [{
+          "type": 4,
+          "label": "Social Media Messaging Profiles",
+          "custom_id": "OnboardingAsset.814614335229263945.0003.social",
+          "style": 2,
+          "placeholder": "https://www.facebook.com/NonPartisanDE\nhttps://twitter.com/NonPartisanDE\n ..."
+        }]
+      }]
+    }
+  }, {
+    "type": "OnboardingAsset",
+    "guildId": "814614335229263945",
+    "identifier": "OnboardingAsset.814614335229263945.0004",
+    "fieldMapping": ["contactVerified"],
+    "order": 4,
+    "msgJson": {
+      "embeds": [{
+        "title": "NPD Onboarding: Contact Verification",
+        "description": "Select an alternative contact method below to verify it.  Click the button below when you're done.",
+        "fields": [{
+          "name": "Instructions",
+          "value": "*The order you in which you complete the verifications will determine which method we prefer when contacting you.\n\nYou can select already verified options again to move them to the bottom of the list.\n\n**TEMPORARILY NOT FUNCTIONAL, JUST CLICK `Done`***"
+        }, {
+          "name": "Methods",
+          "value": "1. Social Media\n2. SMS\n3. Voice"
+        }],
+        "thumbnail": {
+          "url": "https://raw.githubusercontent.com/NPD-Admin/Non-Partisan-Delaware-Documents/main/Branding%20Assets/profile.png"
+        }
+      }],
+      "components": [{
+        "type": 1,
+        "components": [{
+          "type": 3,
+          "label": "Verify Contact",
+          "style": 1,
+          "custom_id": "OnboardingAsset.814614335229263945.0004.verifyContact",
+          "options": [{
+            "label": "SMS",
+            "value": "sms"
+          }, {
+            "label": "Voice",
+            "value": "voice"
+          }, {
+            "label": "Social Media",
+            "value": "social"
+          }],
+          "disabled": true
+        }]
+      }, {
+        "type": 1,
+        "components": [{
+          "type": 2,
+          "label": "Done",
+          "style": 1,
+          "custom_id": "OnboardingAsset.814614335229263945.0004.contactVerified"
+        }]
+      }]
+    }
+  }, {
+    "type": "OnboardingAsset",
+    "guildId": "814614335229263945",
+    "identifier": "OnboardingAsset.814614335229263945.0005",
+    "fieldMapping": ["feedback"],
+    "order": 5,
+    "modalJson": {
+      "title": "NPD Onboarding: Feedback",
+      "custom_id": "OnboardingAsset.814614335229263945.0005",
+      "components": [{
+        "type": 1,
+        "components": [{
+          "type": 4,
+          "label": "Interests & Onboarding Feedback",
+          "custom_id": "OnboardingAsset.814614335229263945.0005.feedback",
+          "style": 2,
+          "placeholder": "Interested in learning about Delaware politics, onboarding process was convenient and functional!"
+        }]
+      }]
+    }
+  }, {
+    "type": "OnboardingAsset",
+    "guildId": "814614335229263945",
+    "identifier": "OnboardingAsset.814614335229263945.0006",
+    "fieldMapping": ["done"],
+    "order": 6,
+    "msgJson": {
+      "embeds": [{
+        "title":"NPD Onboarding: Complete!",
+        "description": "Thank you for taking the time to complete our onboarding process.\n\nA member of the Governing Board will contact you soon regarding your membership application and how you can help support our activities in alignment with your interests.\n\n*Prospective members that actively contribute are more likely to be approved for full membership.*",
+        "thumbnail": {
+          "url": "https://raw.githubusercontent.com/NPD-Admin/Non-Partisan-Delaware-Documents/main/Branding%20Assets/profile.png"
+        }
+      }],
+      "components": [{
+        "type": 1,
+        "components": [{
+          "type": 2,
+          "label": "View Onboarding Record",
+          "custom_id": "OnboardingAsset.814614335229263945.0006.view",
+          "style": 1
+        }]
+      }]
+    }
+  }, {
+    "type": "OnboardingViewTemplate",
+    "identifier": "OnboardingViewTemplate.814614335229263945",
+    "guildId": "814614335229263945",
+    "msgJson": {
+      "ephemeral": true,
+      "embeds": [{
+        "title": "$$nickname$$",
+        "description": "$$legalName$$\n$$legalAddress$$",
+        "timestamp": "$$completed$$",
+        "thumbnail": {
+            "url": "https://raw.githubusercontent.com/NPD-Admin/Non-Partisan-Delaware-Documents/main/Branding%20Assets/profile.png"
+        },
+        "footer": {
+            "text": "Completed:",
+            "icon_url": ""
+        },
+        "fields": [{
+            "name": "Contact Info",
+            "value": "Email\nSMS\nVoice",
+            "inline": true
+        }, {
+            "name": "Through",
+            "value": "$$email$$\n$$sms$$\n$$voice$$",
+            "inline": true
+        }, {
+          "name": "Social Media Profiles",
+          "value": "$$social$$",
+          "inline": false
+        }, {
+            "name": "Feedback",
+            "value": "$$feedback$$",
+            "inline": false
+        }]
+      }]
+    }
+  }]
+}

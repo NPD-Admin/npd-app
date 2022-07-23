@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head'); %>
+</head>
+<body class="container">
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<main>
+  <div class="jumbotron">
+    <h1>Non-Partisan Widget List</h1>
+    <p>The links below can be included in your page to set up the associated widgets.  See the widget pages for installation instructions.</p>
+  </div>
+  <ul>
+    <% for (let widget of widgetList) { %>
+    <li><a href="widgets/<%= widget.name %>"><%= widget.name %></a></li>
+    <% } %>
+  </ul>
+</main>
+
+<footer>
+  <%- include('../partials/footer'); %>
+</footer>
+
+</body>
+</html>

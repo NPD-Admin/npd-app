@@ -1,0 +1,14 @@
+
+class NPDTestWidget {
+  static init() {
+    const widgetId = '<%= widgetId %>'
+    console.log(<%= widgetId %>);
+    console.log(widgetId);
+    const widgetElement = document.getElementById(widgetId);
+    console.log('!!!');
+    console.log(widgetId);
+    widgetElement.innerHTML = 'IT WORKS!';
+  }
+}
+
+NPDTestWidget.init();

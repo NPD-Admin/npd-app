@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head'); %>
+</head>
+<body class="container">
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<main>
+  <div class="jumbotron">
+    <h1>Non-Partisan Widgets</h1>
+    <h2>Test Widget:</h2>
+    <p>Do the thing with the stuff and make it happen.</p>
+  </div>
+  <script src="/widgets/widget/<%= page %>?widgetId=npdTestWidget" defer></script>
+  <div class="card" style="width: fit-content;">
+    <div class="card-body">
+      <div id="npdTestWidget" />
+    </div>
+  </div>
+</main>
+
+<footer>
+  <%- include('../partials/footer'); %>
+</footer>
+
+</body>
+</html>
