@@ -26,7 +26,8 @@
   "scripts": {
     "start": "react-scripts start",
     "react-build": "react-scripts build",
-    "build": "npm run react-build && cd server && npm run client-build",
+    "build": "npm run react-build && cd server && npm run client-build && npm run copy",
+    "copy": "copyfiles build/**/* server/dist/",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prod": "cd server && npm run start"

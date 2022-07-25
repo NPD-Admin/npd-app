@@ -10,7 +10,7 @@
     "copy-files": "copyfiles views/**/* assets/**/* creds/**/* dist/",
     "copy-web": "copyfiles -u 1 ../build/**/* dist/",
     "build": "cd .. && npm run react-build && cd server && npm run clean && tsc && npm run copy-files && npm run copy-web",
-    "client-build": "npm run clean && npm i && tsc && npm run copy-files && npm run copy-web",
+    "client-build": "npm run clean && npm i && tsc && npm run copy-files",
     "start": "node dist/index.js"
   },
   "keywords": [],
