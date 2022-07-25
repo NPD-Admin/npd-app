@@ -30,7 +30,8 @@
     "build": "npm run clean && npm run react-build && npm run copy && cd server && npm run client-build",
     "clean": "rimraf server/dist/",
     "copy": "copyfiles build/**/* server/dist",
-    "heroku-postbuild": "copyfiles build/**/* server/dist",
+    "heroku-cleanup": "copyfiles build/**/* server/dist",
+    "postinstall": "copyfiles build/**/* server/dist",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prod": "cd server && npm run start"
