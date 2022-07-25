@@ -46,13 +46,11 @@ export class NPDServer {
     //     res.status(503).send('Channel not available');
     //   }
     // })
+
     let buildFolder = join(__dirname, '..', 'build');
-    console.log(buildFolder);
     if (!existsSync(buildFolder)) buildFolder = join(__dirname, '..', '..', '..', 'build');
-    console.log(buildFolder);
-    console.log(existsSync(buildFolder));
     app.use('/', express.static(buildFolder));
-    app.get('/', (req, res) => res.send('wtf'));
+
     app.listen(port, () => {
       console.log(`Web server listening on: ${port}...`);
     });
