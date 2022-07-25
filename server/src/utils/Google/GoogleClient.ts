@@ -120,7 +120,7 @@ export class GoogleClient {
     const ticket = await this.webClient.verifyIdToken({
       idToken: token,
       audience: this.webClient._clientId!
-    }).catch() || new Error('Failed to verify ID token based on the code provided.');
+    }).catch(() => {}) || new Error('Failed to verify ID token based on the code provided.');
     if (ticket instanceof Error) return ticket;
 
     const payload = ticket.getPayload();
