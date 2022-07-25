@@ -1,6 +1,6 @@
 import express, { Express } from 'express';
 import session, { MemoryStore } from 'express-session';
-import { readdirSync } from 'fs';
+import { existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { APIRouter } from './handlers/request/routers/APIRouter';
 import { BotRouter } from './handlers/request/routers/BotRouter';
@@ -46,10 +46,10 @@ export class NPDServer {
     //     res.status(503).send('Channel not available');
     //   }
     // })
-console.log(join(__dirname, '..', 'build'));
-console.log(readdirSync(join(__dirname, '..', 'build')));
-    app.use('/', express.static(join(__dirname, '..', 'build')));
-app.get('/', (req, res) => res.send('wtf'));
+    let buildFolder = join(__dirname, '..', 'build');
+    if (!existsSync(buildFolder)) buildFolder = join(__dirname, '..', '..', 'build');
+    app.use('/', express.static(buildFolder));
+    app.get('/', (req, res) => res.send('wtf'));
     app.listen(port, () => {
       console.log(`Web server listening on: ${port}...`);
     });
