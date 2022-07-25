@@ -4,6 +4,7 @@
   "proxy": "http://localhost:5000",
   "private": true,
   "dependencies": {
+    "copyfiles": "^2.4.1",
     "@react-oauth/google": "^0.2.6",
     "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
