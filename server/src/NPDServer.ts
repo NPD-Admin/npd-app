@@ -46,7 +46,7 @@ export class NPDServer {
     //   }
     // })
 
-    app.use(express.static(join(__dirname, '..', '/build')));
+    app.use('/', express.static(join(__dirname, '..', '/build')));
 
     app.listen(port, () => {
       console.log(`Web server listening on: ${port}...`);
