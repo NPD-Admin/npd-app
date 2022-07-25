@@ -32,10 +32,8 @@ export class OAuthRouter {
     });
 
     router.get('/session', async (req: Request, res: Response) => {
-      console.log(req.session);
       if (req.session.token) {
         const user = await GoogleClient.validateJWT(req.session.token);
-        console.log(user);
         res.json(user);
       } else res.status(404).json({ error: 'Not logged in, no session found.' });
     })
