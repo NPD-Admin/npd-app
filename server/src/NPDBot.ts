@@ -17,6 +17,7 @@ export type BotConfig = {
 
 export class NPDBot {
   readonly configs: WithId<BotConfig>[] = [];
+  isActive: boolean = true;
   handlers: IHandler[] = [];
 
   constructor(readonly client: Client = new Client({ intents, partials })) { Setup.runSetup(this, this.client = client); }
@@ -25,6 +26,7 @@ export class NPDBot {
   getConfig(guildId: Snowflake): WithId<BotConfig> | undefined { return this.configs.find(config => config.guildId === guildId); }
 
   private async handle(evtPayload: BotEvent, type: EventType): Promise<void | Error[]> {
+    if (!this.isActive) return console.log('Bot disabled.');
     const handlers = this.handlers.filter(handler => handler.type === type && handler.listeningFor(evtPayload));
     return await Promise.all(handlers.map(handler => handler.callback(evtPayload))).catch(console.error);
   }

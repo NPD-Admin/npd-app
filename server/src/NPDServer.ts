@@ -1,9 +1,11 @@
-import { TextChannel } from 'discord.js';
-import express, { Express, Request, Response } from 'express';
-import { readdirSync } from 'fs';
-import path, { join } from 'path';
+import express, { Express } from 'express';
+import session, { MemoryStore } from 'express-session';
+import { join } from 'path';
+import { APIRouter } from './handlers/request/routers/APIRouter';
+import { BotRouter } from './handlers/request/routers/BotRouter';
+import { OAuthRouter } from './handlers/request/routers/OAuthRouter';
+import { WidgetRouter } from './handlers/request/routers/WidgetRouter';
 import { NPDBot } from './NPDBot';
-import { GoogleClient } from './utils/Google/GoogleClient';
 
 export class NPDServer {
   static start(botInstance: NPDBot): void {
@@ -12,6 +14,13 @@ export class NPDServer {
 
     app.set('view engine', 'ejs');
 
+    app.use(session({
+      secret: 'T0p$3cr3T',
+      resave: true,
+      saveUninitialized: true,
+      cookie: { secure: 'auto', maxAge: 1000*60*60*24 },
+      store: new MemoryStore({})
+    }));
     app.use(express.json());
     app.use(express.raw());
     app.use(express.urlencoded({ extended: true }));
@@ -22,46 +31,10 @@ export class NPDServer {
       next();
     });
 
-    app.get('/api', (req, res) => {
-      res.json({ version: '0.1.0'});
-    });
-
-    app.get('/oauth', async (req, res) => {
-      console.log(req.query);
-      await GoogleClient.validateCode(req.query.code as string).catch(e => res.json(e));
-      if (!res.headersSent)
-        res.send('Authenticated.');
-    });
-
-    app.get('/widgets/widget/:widgetName', (req, res) => {
-      const widgetId = req.query.widgetId;
-      res.set({ 'Content-type': 'text/javascript' });
-      res.render(`pages/widgets/${req.params.widgetName}`, {
-        widgetId
-      });
-    });
-
-    app.get('/widgets/:page?', (req, res) => {
-      if (!req.params.page) {
-        const fileList = readdirSync(path.join(__dirname, '../views/pages/widgets'), { withFileTypes: true });
-        const widgetList = fileList.map(file => {
-          if (file.isDirectory()) return null;
-          if (file.name === 'index.ejs') return null;
-          return ({ name: file.name.split('.')[0] });
-        }).filter(w => w);
-        res.render('pages/index', { widgetList });
-      } else res.render(`pages/widget`, { page: req.params.page });
-    });
-
-    // app.get('/discord', async (req: Request, res: Response) => {
-    //   const channel = botInstance.client.channels.resolve('822532580674371605') as TextChannel;
-    //   if (channel) {
-    //     await channel.send('posted from the web');
-    //     res.send('OK');
-    //   } else {
-    //     res.status(503).send('Channel not available');
-    //   }
-    // });
+    app.use('/api', APIRouter.getRouter());
+    app.use('/bot', BotRouter.getRouter(botInstance));
+    app.use('/oauth', OAuthRouter.getRouter());
+    app.use('/widgets', WidgetRouter.getRouter());
 
     // app.post('/discord', async (req: Request, res: Response) => {
     //   const channel = botInstance.client.channels.resolve('822532580674371605') as TextChannel;
