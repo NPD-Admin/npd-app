@@ -3,6 +3,7 @@
 import { google, Auth, admin_directory_v1, gmail_v1, drive_v3, Common, GoogleApis } from 'googleapis';
 import readline from 'readline';
 import { mkdir, readFile, unlink, writeFile } from 'fs/promises';
+import { existsSync } from 'fs';
 
 export { Common, admin_directory_v1 };
 const scopes = [
@@ -14,6 +15,8 @@ const scopes = [
   'https://www.googleapis.com/auth/admin.directory.group.member',
   'https://www.googleapis.com/auth/admin.directory.group'
 ];
+
+let tokenEnvData = process.env.google_token;
 
 export class GoogleClient {
   static client: Auth.OAuth2Client;
@@ -35,13 +38,16 @@ export class GoogleClient {
   static async getClient(): Promise<Auth.OAuth2Client | void> {
     if (this.client) return this.client;
 
-    const credentials = await readFile(process.cwd() + '/creds/google_creds.json').catch(e => console.error('No creds file, getting from env'))
-      || process.env.google_creds as string;
+    const credentials = process.env.google_creds as string ||
+      await readFile(process.cwd() + '/creds/google_creds.json');
+    if (!credentials) return console.error('Could not load OAuth2 Client Credentials.');
+
     const { client_secret, client_id, redirect_uris } = JSON.parse(credentials.toString()).installed;
     const oAuth2Client = this.client = new Auth.OAuth2Client({ clientId: client_id, clientSecret: client_secret, redirectUri: redirect_uris[0]});
+
     return new Promise(async (resolve, reject) => {
-      const token = await readFile(process.cwd()+'/creds/google_token.json').catch(e => {
-        console.log('Token not found.  Please authenticate to generate a new token.\n');
+      const token = process.env.google_token || await readFile(process.cwd()+'/creds/google_token.json').catch(e => {
+        console.log('No token found, please authenticate:');
         const authUrl = oAuth2Client.generateAuthUrl({
           access_type: 'offline',
           scope: scopes.join(' ')
@@ -59,18 +65,21 @@ export class GoogleClient {
           const token = await oAuth2Client.getToken(code);
           oAuth2Client.setCredentials(token.tokens);
           await writeFile(process.cwd()+'/creds/google_token.json', JSON.stringify(token, null, 2));
+          console.log(token);
           google.options({ auth: oAuth2Client });
           await this.testMailer();
           resolve(this.client);
         });
       }) as Buffer;
-      if (token && token instanceof Buffer) {
+      if (token && (token instanceof Buffer || typeof token === 'string')) {
         const tokenData = JSON.parse(token.toString()) as { tokens: Auth.Credentials, res: Common.GaxiosResponse };
         const tokenScopes = (tokenData.tokens.scope || '').split(' ');
         
         if (!scopes.every(scope => tokenScopes.includes(scope))) {
           console.log('Existing token is missing required scopes.  Resetting token...');
-          await unlink(process.cwd()+'/creds/google_token.json');
+          if (existsSync(process.cwd()+'/creds/google_token.json'))
+            await unlink(process.cwd()+'/creds/google_token.json');
+          tokenEnvData = undefined;
           resolve(await this.getClient());
         } else {
           oAuth2Client.setCredentials(tokenData.tokens);
@@ -87,6 +96,7 @@ export class GoogleClient {
     await mkdir(process.cwd() + '/creds');
     await writeFile(process.cwd() + '/creds/google_token.json', JSON.stringify(token, null, 2));
     google.options({ auth: this.client });
+    console.log(token);
     await this.testMailer();
     return this.client;
   }

@@ -37,7 +37,7 @@ export class NPDBot {
     const type: EventType = (interaction.isCommand() && EventType.COMMAND) || EventType.INTERACTION;
     const result = await this.handle(interaction, type);
 
-    await this.defaultInteractionHandler(interaction, result);
+    if (this.isActive) await this.defaultInteractionHandler(interaction, result);
   }
 
   private async defaultInteractionHandler(interaction: Interaction, result: void | Error[]): Promise<void> {

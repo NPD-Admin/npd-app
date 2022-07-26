@@ -25,6 +25,10 @@ export class NPDServer {
     app.use(express.json());
     app.use(express.raw());
     app.use(express.urlencoded({ extended: true }));
+    app.use(express.text({
+      type: 'text/html',
+      limit: '100mb'
+    }));
 
     app.use(function(req, res, next) {
       res.header("Access-Control-Allow-Origin", "https://www.nonpartisande.org");
