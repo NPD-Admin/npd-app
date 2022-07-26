@@ -17,7 +17,7 @@ export type BotConfig = {
 
 export class NPDBot {
   readonly configs: WithId<BotConfig>[] = [];
-  isActive: boolean = true;
+  isActive: boolean = false;
   handlers: IHandler[] = [];
 
   constructor(readonly client: Client = new Client({ intents, partials })) { Setup.runSetup(this, this.client = client); }
