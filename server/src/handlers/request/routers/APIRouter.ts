@@ -13,7 +13,7 @@ export class APIRouter {
       const imgData = await htmlToImageConverter({
         html: req.body,
         puppeteerArgs: {
-          args: ['--no-sandbox-and-elevated']
+          args: ['--no-sandbox']
         }
       });
       res.setHeader('Content-type', 'image/png');
