@@ -115,18 +115,9 @@ export class GoogleClient {
     return { ...payload, jwt: token.tokens.id_token! };
   }
 
-  static async getWebClient(): Promise<Auth.OAuth2Client> {
-    if (this.webClient) return this.webClient;
-
-    const credentials = await readFile(process.cwd() + '/creds/google_web.json').catch(e => console.error('No creds file, getting from env'))
-      || process.env.google_web as string;
-    const { client_secret, client_id, redirect_uris } = JSON.parse(credentials.toString()).web;
-    this.webClient = new Auth.OAuth2Client({ clientId: client_id, clientSecret: client_secret, redirectUri: redirect_uris[0] });
-
-    return this.webClient;
-  }
-
   static async validateJWT(token: string): Promise<Auth.TokenPayload | Error> {
+    await this.getWebClient();
+
     const ticket = await this.webClient.verifyIdToken({
       idToken: token,
       audience: this.webClient._clientId!
@@ -137,6 +128,17 @@ export class GoogleClient {
     if (!payload) return new Error('Failed to retrieve JWT payload from ID token.');
 
     return payload;
+  }
+
+  static async getWebClient(): Promise<Auth.OAuth2Client> {
+    if (this.webClient) return this.webClient;
+
+    const credentials = await readFile(process.cwd() + '/creds/google_web.json').catch(e => console.error('No creds file, getting from env'))
+      || process.env.google_web as string;
+    const { client_secret, client_id, redirect_uris } = JSON.parse(credentials.toString()).web;
+    this.webClient = new Auth.OAuth2Client({ clientId: client_id, clientSecret: client_secret, redirectUri: redirect_uris[0] });
+
+    return this.webClient;
   }
 
   static async testMailer(): Promise<Error | string> {
