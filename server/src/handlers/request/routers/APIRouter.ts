@@ -23,7 +23,7 @@ export class APIRouter {
 
     router.post('/legLookup', async (req: Request, res: Response) => {
       const data = await GeoLookup.findLegislators(req.body.address)
-        .catch(e => res.status(503).json(e));
+        .catch(e => res.status(503).json(e.message));
       if (data instanceof Error) res.json({ error: data.message });
       else res.json(data);
     });
