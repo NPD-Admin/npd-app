@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
 import htmlToImageConverter from 'node-html-to-image';
 import { GeoLookup } from '../../../utils/GeoLookup';
+import { Wrapper } from '../Wrapper';
 
 export class APIRouter {
   static getRouter(): Router {
@@ -10,7 +11,7 @@ export class APIRouter {
       res.json({ version: '0.1.0'});
     });
 
-    router.post('/screenshotHtml', async (req: Request, res: Response) => {
+    router.post('/screenshotHtml', Wrapper(async (req: Request, res: Response) => {
       const imgData = await htmlToImageConverter({
         html: req.body,
         puppeteerArgs: {
@@ -19,14 +20,14 @@ export class APIRouter {
       });
       res.setHeader('Content-type', 'image/png');
       res.send(imgData);
-    });
+    }));
 
-    router.post('/legLookup', async (req: Request, res: Response) => {
+    router.post('/legLookup', Wrapper(async (req: Request, res: Response) => {
       const data = await GeoLookup.findLegislators(req.body.address)
         .catch(e => res.status(503).json(e.message));
       if (data instanceof Error) res.json({ error: data.message });
       else res.json(data);
-    });
+    }));
 
     return router;
   }

@@ -1,6 +1,6 @@
 import express, { Express } from 'express';
 import session, { MemoryStore } from 'express-session';
-import { existsSync, readdirSync } from 'fs';
+import { existsSync } from 'fs';
 import { join } from 'path';
 import { APIRouter } from './handlers/request/routers/APIRouter';
 import { BotRouter } from './handlers/request/routers/BotRouter';
@@ -15,6 +15,17 @@ export class NPDServer {
 
     app.set('view engine', 'ejs');
 
+    app.use((req, res, next) => {
+      try {
+        next();
+      } catch (e) {
+        console.error(e);
+        res.status(503).json({
+          error: JSON.stringify(e, null, 2)
+        });
+      }
+    });
+
     app.use(session({
       secret: 'T0p$3cr3T',
       resave: true,
@@ -22,6 +33,7 @@ export class NPDServer {
       cookie: { secure: 'auto', maxAge: 1000*60*60*24 },
       store: new MemoryStore({})
     }));
+
     app.use(express.json());
     app.use(express.raw());
     app.use(express.urlencoded({ extended: true }));
