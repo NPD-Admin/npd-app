@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import htmlToImageConverter from 'node-html-to-image';
+import { GeoLookup } from '../../../utils/GeoLookup';
 
 export class APIRouter {
   static getRouter(): Router {
@@ -18,6 +19,10 @@ export class APIRouter {
       });
       res.setHeader('Content-type', 'image/png');
       res.send(imgData);
+    });
+
+    router.post('/legLookup', async (req: Request, res: Response) => {
+      res.json(await GeoLookup.findLegislators(req.body.address));
     });
 
     return router;

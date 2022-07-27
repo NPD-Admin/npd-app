@@ -6,7 +6,12 @@ const GEO_URL = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeSe
 const DIS_URL = `https://enterprise.firstmap.delaware.gov/arcgis/rest/services/Boundaries/DE_Political_Boundaries/MapServer/XX/`+
   `query?f=json&geometryType=esriGeometryPoint&outFields=*&geometry=`;
 
-export type AddressResponse = { candidates: AddressCandidate[] };
+export type AddressResponse = {
+  candidates: AddressCandidate[],
+  spatialReference: {
+    wkid: number
+  }
+};
 export type AddressCandidate = {
   address: string,
   location: {
@@ -14,7 +19,7 @@ export type AddressCandidate = {
     y: number
   },
   score: number,
-  spatialReference: {
+  spatialReference?: {
     wkid: number
   }
 };
@@ -43,7 +48,7 @@ export class GeoLookup {
     if (!candidates.length || candidates[0].score < 100)
       return new Error(`Address not found.  Closest match:\n${candidates[0].address} (${candidates[0].score}%)`);
     
-    return candidates[0];
+    return { ...candidates[0], spatialReference: addressResponse.spatialReference };
   }
 
   static async findDistricts(address: string): Promise<GeoLocation | Error> {
@@ -54,7 +59,7 @@ export class GeoLookup {
     const geometry = {
       x: candidate.location.x,
       y: candidate.location.y,
-      spatialReference: { wkid: candidate.spatialReference.wkid }
+      spatialReference: { wkid: candidate.spatialReference!.wkid }
     };
     const queryString = JSON.stringify(geometry);
     const districtRequests = [0, 1, 2, 3].map(i => HTTPSRequest.httpsGetRequest(DIS_URL.replace(/XX/g, i.toString())+queryString));
