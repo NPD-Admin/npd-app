@@ -11,7 +11,10 @@ export class APIRouter {
 
     router.post('/screenshotHtml', async (req: Request, res: Response) => {
       const imgData = await htmlToImageConverter({
-        html: req.body
+        html: req.body,
+        puppeteerArgs: {
+          args: ['--no-sandbox-and-elevated']
+        }
       });
       res.setHeader('Content-type', 'image/png');
       res.send(imgData);
