@@ -8,9 +8,14 @@ import { resolve } from 'path';
     cwd: resolve(process.cwd(), d)
   }))).result.catch(console.error);
   console.log('Installs complete, beginning npm builds...');
-  await concurrently(installResults.map(d => ({
+  const buildResults = await concurrently(installResults.map(d => ({
     command: 'npm run build',
     cwd: d.command.cwd
   }))).result.catch(console.error);
-  console.log('Builds complete.');
+  console.log('Builds complete, pruning dev dependencies...');
+  await concurrently(buildResults.map(d => ({
+    command: 'npm prune --production',
+    cwd: d
+  }))).result;
+  console.log('Pruning complete.');
 })();
