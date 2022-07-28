@@ -11,9 +11,9 @@
 
     "build": "npm run build:clean && concurrently \"npm run build:server\" \"npm run build:main\" \"npm run build:widgets\" && npm run build:copy:main",
     "build:clean": "rimraf dist",
-    "build:server": "npm i --prefix ./server --dev && npm run build --prefix ./server && npm prune --prefix ./server",
-    "build:main": "npm i --prefix ./main --dev && npm run build --prefix ./main && npm prune --prefix ./main",
-    "build:widgets": "npm i --prefix ./widgets --dev && npm run build --prefix ./widgets && npm prune --prefix ./widgets",
+    "build:server": "npm i --prefix ./server --dev && npm run build --prefix ./server && npm prune --prefix ./server --production --json",
+    "build:main": "npm i --prefix ./main --dev && npm run build --prefix ./main && npm prune --prefix ./main --production --json",
+    "build:widgets": "npm i --prefix ./widgets --dev && npm run build --prefix ./widgets && npm prune --prefix ./widgets --production --json",
     "build:copy:main": "copyfiles -u 2 ./main/build/**/* dist/build/",
 
     "prod": "cd dist && node index.js"
