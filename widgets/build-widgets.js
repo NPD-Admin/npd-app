@@ -18,7 +18,7 @@ console.log('Found Widgets:\n', directories.map(d => `--${d.name}`).join('\n'));
   const pruneResult = await concurrently(buildResult.map(d => ({
     command: 'npm prune',
     cwd: d.command.cwd
-  })))
+  }))).result.catch(console.error);
   await concurrently(pruneResult.map(d => ({
     command: 'webpack',
     cwd: d.command.cwd
