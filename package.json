@@ -16,7 +16,7 @@
     "build:widgets": "npm i --prefix ./widgets --dev && npm run build --prefix ./widgets && npm prune --prefix ./widgets --production --json",
     "build:copy:main": "copyfiles -u 2 ./main/build/**/* dist/build/",
 
-    "prod": "cd dist && node index.js"
+    "prod": "npm run start --prefix ./server"
   },
   "repository": {
     "type": "git",
