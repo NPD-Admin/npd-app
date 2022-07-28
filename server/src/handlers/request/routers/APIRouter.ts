@@ -1,6 +1,8 @@
+import { load } from 'cheerio';
 import { Request, Response, Router } from 'express';
 import htmlToImageConverter from 'node-html-to-image';
 import { GeoLookup } from '../../../utils/GeoLookup';
+import { HTTPSRequest } from '../../../utils/HTTPSRequest';
 import { Wrapper } from '../Wrapper';
 
 export class APIRouter {
@@ -28,8 +30,20 @@ export class APIRouter {
           console.error(e);
           res.status(503).json(e.message);
         });
+      
       if (data instanceof Error) res.json({ error: data.message });
       else res.json(data);
+    }));
+
+    router.get('/scrapeImage', Wrapper(async (req: Request, res: Response) => {
+      const { url } = req.body;
+      const html = (await HTTPSRequest.httpsGetRequest(url)).toString();
+      const img = load(html)('.img-avatar');
+      if (img && img[0] && img[0] instanceof HTMLImageElement) {
+        res.setHeader('Content-type', 'image/png').send(img[0].src);
+      } else {
+        res.status(404).json('Failed to download image.');
+      }
     }));
 
     return router;
