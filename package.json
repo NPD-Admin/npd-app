@@ -2,6 +2,7 @@
   "name": "npd-app",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "description": "This codebase is several projects wrapped into one, and the script to build them all together automatically is a work in progress.  Includes:",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:main\" \"npm run dev:npdLegWidget\" --restart-after 15000",
@@ -9,7 +10,7 @@
     "dev:main": "cd main && npm start",
     "dev:npdLegWidget": "cd widgets/npdLegWidget && npm start",
 
-    "build": "npm run build:clean && concurrently \"npm run build:server\" \"npm run build:main\" \"npm run build:widgets\" && npm run build:copy:main",
+    "build": "npm run build:clean && node ./scripts/build.js && npm run build:copy:main",
     "build:clean": "rimraf dist",
     "build:server": "npm i --prefix ./server && npm run build --prefix ./server",
     "build:main": "npm i --prefix ./main && npm run build --prefix ./main",
