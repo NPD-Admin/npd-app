@@ -1,6 +1,6 @@
 import express, { Express } from 'express';
 import session, { MemoryStore } from 'express-session';
-import { existsSync } from 'fs';
+import { existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { APIRouter } from './handlers/request/routers/APIRouter';
 import { BotRouter } from './handlers/request/routers/BotRouter';
@@ -65,7 +65,7 @@ export class NPDServer {
 
     let buildFolder = join(__dirname, '..', 'build');
     if (!existsSync(buildFolder)) buildFolder = join(__dirname, '..', '..', '..', 'build');
-    console.log(buildFolder);
+    console.log(buildFolder, readdirSync(buildFolder));
     app.use('/', express.static(buildFolder));
 
     app.listen(port, () => {

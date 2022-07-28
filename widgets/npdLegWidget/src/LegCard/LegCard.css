@@ -1,0 +1,30 @@
+.LegCard-Subtitle {
+  font-style: italic;
+  margin-bottom: 15px;
+}
+
+.avatar {
+  position: absolute;
+  top: 0px;
+  height: 100%;
+  right: 0;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: gray;
+  opacity: 80%;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--bs-card-border-radius);
+}
+
+.overlay-spinner {
+  margin: auto auto;
+}

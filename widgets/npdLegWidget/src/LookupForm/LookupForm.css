@@ -1,0 +1,73 @@
+.form-container {
+  color: #73859d;
+}
+
+.form-container label {
+  display: block;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 5px 0 5px 0;
+}
+
+.form-container input {
+  display: block;
+  text-align: center;
+  width: 400px;
+  padding: 0.5rem 0.8rem 0.5rem 0.8rem;
+  margin: auto auto 2.5px auto;
+  border: 0;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  box-shadow: 0 0 0px 1000px #fafafa inset;
+  -webkit-box-shadow: 0 0 0px 1000px #fafafa inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.button-container {
+  display: block;
+  width: 100%;
+  padding: 0rem 1rem 0.5rem 1rem;
+  border-radius: 5px;
+}
+
+.prevBtn,
+.nextBtn {
+  display: inline-block;
+  width: 125px;
+  height: 2rem;
+  border: 0;
+  bottom: 0;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.prevBtn {
+  margin: 1rem 0 1rem 0;
+  float: left;
+  border-radius: 20px 20px 20px 20px;
+  background-color: #daa06d;
+}
+
+.nextBtn {
+  margin: 1rem 0 1rem 0;
+  float: right;
+  border-radius: 20px 20px 20px 20px;
+  background-color: #73859d;
+}
+
+.nextBtn:hover,
+.prevBtn:hover {
+  transition: 0.5s background ease;
+}

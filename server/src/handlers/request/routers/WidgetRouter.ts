@@ -17,11 +17,10 @@ export class WidgetRouter {
 
     router.get('/:page?', Wrapper((req: Request, res: Response) => {
       if (!req.params.page) {
-        const fileList = readdirSync(path.join(process.cwd(), '/views/pages/widgets'), { withFileTypes: true });
+        const fileList = readdirSync(path.join(process.cwd(), '/widgets'), { withFileTypes: true });
         const widgetList = fileList.map(file => {
-          if (file.isDirectory()) return null;
-          if (file.name === 'index.ejs') return null;
-          return ({ name: file.name.split('.')[0] });
+          if (file.isDirectory()) return file.name;
+          return null;
         }).filter(w => w);
         res.render('pages/index', { widgetList });
       } else res.render(`pages/widget`, { page: req.params.page });

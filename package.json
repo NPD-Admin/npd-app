@@ -1,58 +1,40 @@
 {
   "name": "npd-app",
   "version": "0.1.0",
-  "proxy": "http://localhost:5000",
   "private": true,
-  "dependencies": {
-    "@react-oauth/google": "^0.2.6",
-    "copyfiles": "^2.4.1",
-    "jwt-decode": "^3.1.2",
-    "node-html-to-image": "^3.2.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1",
-    "typescript": "^4.7.4",
-    "web-vitals": "^2.1.4"
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.11.45",
-    "@types/react": "^18.0.15",
-    "@types/react-dom": "^18.0.6",
-    "nodemon": "^2.0.19",
-    "rimraf": "^3.0.2"
-  },
+  "description": "This codebase is several projects wrapped into one, and the script to build them all together automatically is a work in progress.  Includes:",
   "scripts": {
-    "start": "react-scripts start",
-    "react-build": "react-scripts build",
-    "build": "npm run clean && npm run react-build && npm run copy && cd server && npm run client-build",
-    "clean": "rimraf server/dist/",
-    "copy": "copyfiles build/**/* server/dist",
-    "heroku-cleanup": "copyfiles build/**/* server/dist",
-    "postinstall": "copyfiles build/**/* server/dist",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "prod": "cd server && npm run start"
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:main\" \"npm run dev:npdLegWidget\" --restart-after 15000",
+    "dev:server": "cd server && nodemon -i creds -i dist -i build index.ts",
+    "dev:main": "cd main && npm start",
+    "dev:npdLegWidget": "cd widgets/npdLegWidget && npm start",
+
+    "build": "npm run build:clean && concurrently \"npm run build:server\" \"npm run build:main\" \"npm run build:widgets\" && npm run build:copy:main",
+    "build:clean": "rimraf dist",
+    "build:server": "cd server && npm i && npm run build",
+    "build:main": "cd main && npm i && npm run build",
+    "build:widgets": "cd widgets && npm i && npm run build",
+    "build:copy:main": "copyfiles -u 2 ./main/build/**/* dist/build/",
+
+    "prod": "cd dist && node index.js"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NPD-Admin/npd-app.git"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "keywords": [],
+  "author": "Will McVay",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NPD-Admin/npd-app/issues"
+  },
+  "homepage": "https://github.com/NPD-Admin/npd-app#readme",
+  "devDependencies": {
+    "concurrently": "^7.3.0",
+    "copyfiles": "^2.4.1",
+    "rimraf": "^3.0.2",
+    "ts-loader": "^9.3.1",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
   }
 }

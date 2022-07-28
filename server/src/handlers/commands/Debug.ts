@@ -4,6 +4,7 @@ import { TextInputStyles } from 'discord.js/typings/enums';
 import { EventType } from "../../types/EventTypes";
 import { IHandler } from '../../types/IHandler';
 import { admin_directory_v1, Common, GoogleClient } from '../../utils/Google/GoogleClient';
+import { MailerLite } from '../../utils/MailerLite';
 
 export class Debug implements IHandler {
   config: ApplicationCommandDataResolvable = {
@@ -12,8 +13,7 @@ export class Debug implements IHandler {
     options: [{
       name: 'email',
       description: 'email to add',
-      type: 3,
-      required: true
+      type: 3
     }]
   }
 
@@ -22,6 +22,11 @@ export class Debug implements IHandler {
   listeningFor(command: CommandInteraction): boolean { return (command.commandName === 'debug'); }
 
   async callback(command: CommandInteraction): Promise<void> {
-    command.reply({ ephemeral: true, content: 'No /debug handler.' });
+    const email = command.options.getString('email');
+    if (!email) return command.reply({ ephemeral: true, content: 'Please provide an email address.' });
+
+    const r = await MailerLite.addGroupMember('61274307477636533', email);
+    if (r instanceof Error) return command.reply({ ephemeral: true, content: r.message });
+    command.reply({ ephemeral: true, content: `Subscriber ID: ${r.id}` });
   }
 }

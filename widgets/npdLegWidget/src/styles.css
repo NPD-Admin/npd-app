@@ -1,0 +1,46 @@
+.App {
+  font-family: sans-serif;
+  margin: 20px auto;
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
+}
+
+.Card {
+  width: 450px;
+  border: 1.5px solid black;
+  overflow: hidden;
+}
+
+.Card-Header {
+  vertical-align: middle;
+}
+
+.Card-Header img {
+  vertical-align: middle;
+  margin-right: 5px;
+  width: 20px;
+}
+
+.Card-Header > a {
+  vertical-align: middle;
+  text-decoration: none;
+  color: #73859d;
+}
+
+.Card-Header > a:hover {
+  text-decoration: underline;
+}
+
+.Card-Body {
+  padding: 0px !important;
+  border-radius: 0 0 15px 15px;
+  background-image: url("https://media.discordapp.net/attachments/836842421501034546/1001667894947618906/Delaware-Legislative-Hall-Dover.png");
+  background-position: 85% 25%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  width: 450px;
+  height: 200px;
+  padding: 10px 25px;
+  position: relative;
+}

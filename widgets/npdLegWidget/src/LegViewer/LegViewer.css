@@ -1,0 +1,4 @@
+.LegViewer-Card {
+  margin: 15px;
+  height: calc(100% - 30px) !important;
+}
