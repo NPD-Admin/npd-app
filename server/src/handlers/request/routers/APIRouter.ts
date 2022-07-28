@@ -36,9 +36,12 @@ export class APIRouter {
     }));
 
     router.get('/scrapeImage', Wrapper(async (req: Request, res: Response) => {
-      const { url } = req.body;
+      const url = req.query.url as string;
+      if (!url) return res.status(400).json({ error: 'No legislator URL provided.' });
+
       const html = (await HTTPSRequest.httpsGetRequest(url)).toString();
       const img = load(html)('.img-avatar');
+      
       if (img && img[0] && img[0] instanceof HTMLImageElement) {
         res.setHeader('Content-type', 'image/png').send(img[0].src);
       } else {
