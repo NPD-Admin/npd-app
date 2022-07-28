@@ -8,14 +8,18 @@ console.log('Found Widgets:\n', directories.map(d => `--${d.name}`).join('\n'));
 
 (async () => {
   const installResult = await concurrently(directories.map(d => ({
-    command: 'npm i',
+    command: 'npm i --dev',
     cwd: resolve(process.cwd(), d.name)
   }))).result.catch(console.error);
   const buildResult = await concurrently(installResult.map(d => ({
     command: 'npm run build',
     cwd: d.command.cwd
   }))).result.catch(console.error);
-  await concurrently(buildResult.map(d => ({
+  const pruneResult = await concurrently(buildResult.map(d => ({
+    command: 'npm prune',
+    cwd: d.command.cwd
+  })))
+  await concurrently(pruneResult.map(d => ({
     command: 'webpack',
     cwd: d.command.cwd
   }))).result.catch(console.error);
