@@ -63,6 +63,9 @@ export class GeoLookup {
     
     if (!candidate.location || !candidate.location.x || !candidate.location.y)
       return new Error(`Missing location data:\n${JSON.stringify(candidate, null, 2)}`);
+
+    if (!candidate.address.includes('Delaware'))
+      return new Error(`Address is not in Delaware:\n${candidate.address}`);
     
     const geometry = {
       x: candidate.location.x,
