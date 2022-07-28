@@ -14,11 +14,10 @@
     "build:server": "npm ci --prefix ./server --dev && npm run build --prefix ./server && npm prune --prefix ./server --production --json",
     "build:main": "npm ci --prefix ./main --dev && npm run build --prefix ./main && npm prune --prefix ./main --production --json",
     "build:widgets": "npm ci --prefix ./widgets --dev && npm run build --prefix ./widgets && npm prune --prefix ./widgets --production --json",
-    "build:copy:main": "copyfiles -u 2 ./main/build/**/* dist/build",
+    "build:copy:main": "move-cli ./main/build ./dist",
     "heroku-postbuild": "npm run build && rimraf ./server && rimraf ./widgets",
 
     "build:run": "node -r dotenv/config dist/index.js",
-
     "prod": "node dist/index.js"
   },
   "repository": {
@@ -35,6 +34,7 @@
   "devDependencies": {
     "concurrently": "^7.3.0",
     "copyfiles": "^2.4.1",
+    "move-cli": "^2.0.0",
     "rimraf": "^3.0.2",
     "ts-loader": "^9.3.1",
     "webpack": "^5.74.0",
