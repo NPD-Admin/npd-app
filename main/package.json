@@ -25,12 +25,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "react-build": "npm run clean && npm run react-build && npm run copy && cd server && npm run client-build",
-    "clean": "rimraf server/dist/",
-    "copy": "copyfiles build/**/* server/dist",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "prod": "cd server && npm run start"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
