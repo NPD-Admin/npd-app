@@ -16,6 +16,8 @@
     "build:widgets": "npm i --prefix ./widgets --dev && npm run build --prefix ./widgets && npm prune --prefix ./widgets --production --json",
     "build:copy:main": "copyfiles -u 2 ./main/build/**/* dist/build/",
 
+    "build:run": "node -r dotenv/config dist/index.js",
+
     "prod": "node dist/index.js"
   },
   "repository": {
