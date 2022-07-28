@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "dev": "nodemon -i dist -i creds index.ts",
+    "dev": "set PORT=5000 && nodemon -i dist -i creds index.ts",
     "build": "tsc --sourceMap false && npm run build:copy",
     "build:copy": "copyfiles node_modules/**/* views/**/* assets/**/* creds/**/* .env ../dist",
     "clean": "rimraf dist/",
