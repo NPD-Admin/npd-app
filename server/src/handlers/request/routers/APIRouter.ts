@@ -42,8 +42,8 @@ export class APIRouter {
       const html = (await HTTPSRequest.httpsGetRequest(url)).toString();
       const img = load(html)('.img-avatar');
       
-      if (img && img[0] && img[0] instanceof HTMLImageElement) {
-        res.setHeader('Content-type', 'image/png').send(img[0].src);
+      if (img && img[0] && img[0].attribs.src) {
+        res.setHeader('Content-type', 'image/png').send(img[0].attribs.src);
       } else {
         res.status(404).json('Failed to download image.');
       }
