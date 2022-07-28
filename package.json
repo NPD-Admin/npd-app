@@ -2,7 +2,6 @@
   "name": "npd-app",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "description": "This codebase is several projects wrapped into one, and the script to build them all together automatically is a work in progress.  Includes:",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:main\" \"npm run dev:npdLegWidget\" --restart-after 15000",
