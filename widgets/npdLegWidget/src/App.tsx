@@ -6,8 +6,8 @@ import { Card } from 'react-bootstrap';
 import { useState } from 'react';
 
 import { LookupForm } from './LookupForm/LookupForm';
-const LegViewer = React.lazy(() => import('./LegViewer/LegViewer'));
 import { LegDataNav } from './LegDataNav/LegDataNav';
+const LegViewer = React.lazy(() => import('./LegViewer/LegViewer'));
 
 const iconUrl = [
   'https://cdn.discordapp.com/attachments/',

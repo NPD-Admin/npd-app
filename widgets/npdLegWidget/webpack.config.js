@@ -9,6 +9,7 @@ module.exports = [{
   output: {
     path: path.join(__dirname, '..', '..', 'dist/widgets/'),
     filename: `[name].bundle.min.js`,
+    compareBeforeEmit: false
   },
   module: {
     rules: [
