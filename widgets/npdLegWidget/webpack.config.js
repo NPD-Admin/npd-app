@@ -4,7 +4,7 @@ const glob = require("glob");
 module.exports = [{
   mode: 'production',
   entry: {
-    'NpdLegWidget': glob.sync('build/static/?(js|css)/main.*.?(js|css)').map(f => path.resolve(__dirname, f)),
+    'NpdLegWidget': glob.sync('build/static/+(js|css)/*.+(js|css)').map(f => path.resolve(__dirname, f)),
   },
   output: {
     path: path.join(__dirname, '..', '..', 'dist/widgets/'),

@@ -13,7 +13,7 @@ type Props = {
   retry: (address: string) => void;
 };
 
-export default function LegViewer({ legData, navKey, reset, retry }: Props) {
+export const LegViewer = ({ legData, navKey, reset, retry }: Props) => {
   if ('error' in legData)
     return (
       <Card body className='LegViewer-Card' style={{ whiteSpace: 'pre-wrap' }}>

@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 import { LookupForm } from './LookupForm/LookupForm';
 import { LegDataNav } from './LegDataNav/LegDataNav';
-const LegViewer = React.lazy(() => import('./LegViewer/LegViewer'));
+import { LegViewer } from './LegViewer/LegViewer';
 
 const iconUrl = [
   'https://cdn.discordapp.com/attachments/',
