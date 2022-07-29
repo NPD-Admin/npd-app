@@ -25,17 +25,18 @@ const sub = (e) => {
     cwd: d.command.cwd
   }))).result.catch(sub);
   if (!buildResult) return console.error('Widget packing failed: Building');
-  console.log('Builds complete, pruning dependencies...');
-  const pruneResult = await concurrently(buildResult.map(d => ({
-    command: 'npm prune',
-    cwd: d.command.cwd
-  }))).result.catch(sub);
-  if (!pruneResult) return console.error('Widget packing failed: Pruning');
-  console.log('Pruning complete, packing bundles...');
-  const packingResult = await concurrently(pruneResult.map(d => ({
+  console.log('Builds complete, packing bundles...');
+  const packingResult = await concurrently(buildResult.map(d => ({
     command: 'npm run pack',
     cwd: d.command.cwd
   }))).result.catch(sub);
   if (!packingResult) return console.error('Widget packing failed: Packing');
+  console.log('Packing complete, pruning dependencies...');
+  const pruneResult = await concurrently(packingResult.map(d => ({
+    command: 'npm prune',
+    cwd: d.command.cwd
+  }))).result.catch(sub);
+  if (!pruneResult) return console.error('Widget packing failed: Pruning');
+  console.log('Pruning complete.');
   console.log(`Webpack of (${directories.length}) widgets complete.`)
 })();
