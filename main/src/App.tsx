@@ -74,19 +74,15 @@ function App() {
         </p>
         <p><a
           className='App-link'
-          href='http://localhost:5000'
-          target='_blank'
-          rel='noopener noreferrer'
+          href='/widgets'
         >
-          Visit 'Prod' Server
+          View Widgets
         </a></p>
-        { loginData && 
-          <>
-            <p>The NPD Bot is: {(botStatus && 'Active') || 'Disabled'}</p>
-            <button
-              onClick={toggleBot}  
-            >{(botStatus && 'Disable') || 'Enable'}</button>
-          </>
+        <p>The NPD Bot is: {(botStatus && 'Active') || 'Disabled'}</p>
+        { loginData &&
+          <button
+            onClick={toggleBot}  
+          >{(botStatus && 'Disable') || 'Enable'}</button>
         }
         <div>
           { !loginData &&

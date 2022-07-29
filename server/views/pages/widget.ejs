@@ -15,8 +15,8 @@
         <h2>Test Widget:</h2>
         <p>Do the thing with the stuff and make it happen.</p>
       </div>
-      <script src="/widgets/widget/<%= page %>?widgetDivId=npdTestWidget" defer></script>
-      <div id="npdTestWidget" />
+      <script src="/widgets/widget/<%= page %>" defer></script>
+      <div class="<%= page.split('.')[0] %>-container" />
     </main>
 
     <footer>
