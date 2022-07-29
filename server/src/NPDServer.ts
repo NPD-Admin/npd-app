@@ -14,6 +14,7 @@ export class NPDServer {
     const port = process.env.PORT || 5000;
 
     app.set('view engine', 'ejs');
+    if (process.cwd().includes('app')) app.set('views', join(__dirname, '..', 'views'));
 
     app.use((req, res, next) => {
       try {
