@@ -8,7 +8,7 @@ console.log('Found Widgets:\n', directories.map(d => `--${d.name}`).join('\n'));
 
 (async () => {
   const installResult = await concurrently(directories.map(d => ({
-    command: 'npm i --dev',
+    command: 'npm ci --dev',
     cwd: resolve(process.cwd(), d.name)
   }))).result.catch(console.error);
   const buildResult = await concurrently(installResult.map(d => ({

@@ -16,7 +16,7 @@ function App() {
     setBotStatus(res.active);
   }
 
-  const handleFailure = (e: Pick<CodeResponse, "error" | "error_description" | "error_uri">) => {
+  const handleFailure = (e: Pick<CodeResponse, 'error' | 'error_description' | 'error_uri'>) => {
     console.log('Login failed.', e);
   };
 
@@ -65,20 +65,20 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div className='App'>
+      <header className='App-header'>
+        <img src={logo} className='App-logo' alt='logo' />
         { data && JSON.stringify(data, null, 2) }
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
         <p><a
-          className="App-link"
-          href="http://localhost:5000"
-          target="_blank"
-          rel="noopener noreferrer"
+          className='App-link'
+          href='http://localhost:5000'
+          target='_blank'
+          rel='noopener noreferrer'
         >
-          Visit "Prod" Server
+          Visit 'Prod' Server
         </a></p>
         { loginData && 
           <>

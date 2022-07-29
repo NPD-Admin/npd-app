@@ -5,19 +5,21 @@
   "description": "This codebase is several projects wrapped into one, and the script to build them all together automatically is a work in progress.  Includes:",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:main\" \"npm run dev:npdLegWidget\" --restart-after 15000",
-    "dev:server": "cd server && nodemon -i creds -i dist -i build index.ts",
-    "dev:main": "cd main && npm start",
+    "dev:server": "npm run dev --prefix ./server",
+    "dev:main": "npm start --prefix ./main",
     "dev:npdLegWidget": "cd widgets/npdLegWidget && npm start",
-
-    "build": "npm run build:clean && concurrently \"npm run build:server\" \"npm run build:main\" \"npm run build:widgets\" && npm run build:copy:main",
+    "build": "npm run build:clean && concurrently \"npm run build:server\" \"npm run build:main\" \"npm run build:widgets\"",
     "build:clean": "rimraf dist",
-    "build:server": "npm ci --prefix ./server --dev && npm run build --prefix ./server && npm prune --prefix ./server --production --json",
-    "build:main": "npm ci --prefix ./main --dev && npm run build --prefix ./main && npm prune --prefix ./main --production --json",
-    "build:widgets": "npm ci --prefix ./widgets --dev && npm run build --prefix ./widgets && npm prune --prefix ./widgets --production --json",
-    "build:copy:main": "move-cli ./main/build/**/* ./dist/",
-    "heroku-postbuild": "npm run build && rimraf ./server && rimraf ./widgets",
-
-    "build:run": "node -r dotenv/config dist/index.js",
+    "build:server": "npm ci --prefix ./server --include=dev && npm run build --prefix ./server",
+    "build:main": "npm ci --prefix ./main --include=dev && npm run buildf --prefix ./main",
+    "build:widgets": "npm ci --prefix ./widgets --include=dev && npm run build --prefix ./widgets",
+    "build:copy:main": "mv ./main/build ./dist/build || move ./main/build ./dist/build",
+    "prune": "concurrently \"npm run prune:server\" \"npm run prune:main\" \"npm run prune:widgets\"",
+    "prune:server": "npm prune --prefix ./server --production",
+    "prune:main": "npm prune --prefix ./main --production --json",
+    "prune:widgets": "npm prune --prefix ./widgets --production --json",
+    "heroku-postbuild": "npm run build && npm run prune && rimraf ./server && rimraf ./widgets",
+    "build:run": "npm run local:run --prefix ./dist",
     "prod": "node dist/index.js"
   },
   "repository": {
@@ -34,10 +36,9 @@
   "devDependencies": {
     "concurrently": "^7.3.0",
     "copyfiles": "^2.4.1",
-    "move-cli": "^2.0.0",
+    "dotenv": "^16.0.1",
+    "move-file-cli": "^3.0.0",
     "rimraf": "^3.0.2",
-    "ts-loader": "^9.3.1",
-    "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0"
+    "ts-loader": "^9.3.1"
   }
 }

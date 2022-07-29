@@ -64,6 +64,7 @@ export class NPDServer {
     // })
 
     let buildFolder = join(__dirname, '..', 'build');
+    console.log(buildFolder);
     if (!existsSync(buildFolder)) buildFolder = join(__dirname, '..', '..', '..', 'build');
     console.log(buildFolder, readdirSync(buildFolder));
     app.use('/', express.static(buildFolder));

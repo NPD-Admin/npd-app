@@ -1,5 +1,5 @@
-import { Legislator } from "./Legislator";
-import { County } from "./County";
+import { Legislator } from './Legislator';
+import { County } from './County';
 
 export type GeoLocation = {
   address: string;

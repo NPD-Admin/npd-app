@@ -1,1 +1,1 @@
-export type County = "New Castle" | "Kent" | "Sussex";
+export type County = 'New Castle' | 'Kent' | 'Sussex';
