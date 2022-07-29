@@ -4,7 +4,8 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "build": "node ./build-widgets.js"
+    "build": "node ./build-widgets.js prune",
+    "build:local": "node ./build-widgets.js"
   },
   "keywords": [],
   "author": "",

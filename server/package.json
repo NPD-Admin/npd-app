@@ -7,7 +7,7 @@
     "dev": "set PORT=5000 && nodemon -r dotenv/config -i dist -i creds index.ts",
     "build": "tsc && npm run build:copy && npm run build:deps",
     "build:copy": "copyfiles package*.json views/**/* assets/**/* creds/**/* .env ../dist",
-    "build:deps": "npm ci --production --prefix ../dist",
+    "build:deps": "npm ci --omit=dev --prefix ../dist",
     "clean": "rimraf dist/",
     "copy-files": "copyfiles views/**/* assets/**/* creds/**/* dist/",
     "copy-web": "copyfiles -u 1 ../build/**/* dist/ -E",

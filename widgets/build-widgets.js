@@ -2,6 +2,8 @@ import { concurrently } from 'concurrently';
 import { readdirSync } from 'fs';
 import { resolve } from 'path';
 
+const prune = process.argv[2] === 'prune';
+
 const files = readdirSync(process.cwd(), { withFileTypes: true });
 const directories = files.filter(f => f.isDirectory() && f.name !== 'node_modules');
 console.log(`Found (${directories.length}) Widgets:\n`, directories.map(d => ` • ${d.name}`).join('\n'));
@@ -32,6 +34,10 @@ const sub = (e) => {
   }))).result.catch(sub);
   if (!packingResult) return console.error('Widget packing failed: Packing');
   console.log('Packing complete, pruning dependencies...');
+  if (!prune) return console.log(
+    'Pruning flag not set.  Skipping pruning.\n',
+    `Webpack of (${directories.length}) widgets complete.`
+  );
   const pruneResult = await concurrently(packingResult.map(d => ({
     command: 'npm prune',
     cwd: d.command.cwd

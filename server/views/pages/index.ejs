@@ -16,7 +16,7 @@
   </div>
   <ul>
     <% for (let widget of widgetList) { %>
-    <li><a href="widgets/<%= widget.name %>"><%= widget.name %></a></li>
+    <li><a href="widgets/<%= widget.url %>?rootElementId=npdTestWidget"><%= widget.name %></a></li>
     <% } %>
   </ul>
 </main>
