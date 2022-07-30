@@ -28,7 +28,7 @@ export class NPDServer {
     });
 
     app.use(session({
-      secret: 'T0p$3cr3T',
+      secret: process.env.SESSION_SECRET!,
       resave: true,
       saveUninitialized: true,
       cookie: { secure: 'auto', maxAge: 1000*60*60*24 },
@@ -65,9 +65,8 @@ export class NPDServer {
     // })
 
     let buildFolder = join(__dirname, '..', 'build');
-    console.log(buildFolder);
+    console.log(buildFolder, existsSync(buildFolder));
     if (!existsSync(buildFolder)) buildFolder = join(__dirname, '..', '..', '..', 'build');
-    console.log(buildFolder, readdirSync(buildFolder));
     app.use('/', express.static(buildFolder));
 
     app.listen(port, () => {
