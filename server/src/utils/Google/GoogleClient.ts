@@ -101,7 +101,7 @@ export class GoogleClient {
     return this.client;
   }
 
-  static async retrieveUserJWT(code: string): Promise<(Auth.TokenPayload & { jwt: string }) | Error> {
+  static async retrieveUserJWT(code: string): Promise<(Auth.TokenPayload & { tokens: Auth.Credentials }) | Error> {
     await this.getWebClient();
 
     const token = await this.webClient.getToken(code).catch() || new Error('Invalid code failed to retrieve token.');
@@ -112,7 +112,7 @@ export class GoogleClient {
     if (!payload) return new Error('Failed to retrieve JWT payload from ID token.');
     if (payload instanceof Error) return payload as Error;
 
-    return { ...payload, jwt: token.tokens.id_token! };
+    return { ...payload, tokens: token.tokens };
   }
 
   static async validateJWT(token: string): Promise<Auth.TokenPayload | Error> {
@@ -128,6 +128,25 @@ export class GoogleClient {
     if (!payload) return new Error('Failed to retrieve JWT payload from ID token.');
 
     return payload;
+  }
+
+  static async validateSession(tokensJSON: string) {
+    try {
+      const tokens = JSON.parse(tokensJSON) as Auth.Credentials;
+      await this.getWebClient();
+      this.webClient.setCredentials(tokens);
+      const payload = await this.webClient.refreshAccessToken().catch(e => {
+        console.error(e);
+        return new Error(`Error refreshing access token:\n${e}`);
+      });
+      if (payload instanceof Error) return payload;
+
+      return this.validateJWT(payload.credentials.id_token!);
+    } catch (e) {
+      if (e instanceof SyntaxError) return new Error(`Invalid tokens JSON:\n${tokensJSON}`);
+      console.error(e);
+      return new Error(`Unknown Error Validating Session Tokens:\n${e}`);
+    }
   }
 
   static async getWebClient(): Promise<Auth.OAuth2Client> {

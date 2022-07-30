@@ -12,7 +12,7 @@ export class BotRouter {
     });
 
     router.get('/setState', Wrapper(async (req: Request, res: Response) => {
-      const user = await GoogleClient.validateJWT(req.session.token!);
+      const user = await GoogleClient.validateSession(req.session.token!);
 
       if (!user || user instanceof Error) return res.status(503).json({ error: 'Error retrieving session user information.' });
       if (user.sub !== '113146369515155809637') return res.status(403).json({ error: 'Only the server admin can disable the bot.' });

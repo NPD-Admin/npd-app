@@ -26,13 +26,13 @@ export class OAuthRouter {
 
       const { name, email, picture } = payload;
       res.status(201).json({ name, email, picture });
-      req.session.token = payload.jwt;
+      req.session.token = JSON.stringify(payload.tokens, null, 2);
       req.session.save();
     }));
 
     router.get('/session', Wrapper(async (req: Request, res: Response) => {
       if (req.session.token) {
-        const user = await GoogleClient.validateJWT(req.session.token);
+        const user = await GoogleClient.validateSession(req.session.token);
         res.json(user);
       } else res.status(404).json({ error: 'Not logged in, no session found.' });
     }));
