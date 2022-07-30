@@ -1,9 +1,7 @@
-import React from 'react';
-import './styles.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, Link } from '@mui/material';
 
-import { Card } from 'react-bootstrap';
-import { useState } from 'react';
+import styles from './styles.module.css';
 
 import { LookupForm } from './LookupForm/LookupForm';
 import { LegDataNav } from './LegDataNav/LegDataNav';
@@ -32,15 +30,26 @@ export const App = () => {
   }
 
   return (
-    <Card className='Card App'>
-      <Card.Header className='Card-Header'>
-        <a href='https://www.NonPartisanDE.org'>
-          <img alt='icon' src={iconUrl} />
-          <span>Non-Partisan Delaware: Legislator Lookup</span>
-        </a>
-        {legData && <LegDataNav setKey={setKey} reset={reset} />}
-      </Card.Header>
-      <Card.Body className='Card-Body'>
+    <Card sx={{ flexGrow: 1 }} className={styles['Card']}>
+      <CardHeader
+        avatar={<img alt='NPD Logo' src={iconUrl} />}
+        title={
+          <Link
+            href='https://www.NonPartisanDE.org'
+            variant='body1'
+            rel='noopener'
+            target='_blank'
+            underline='hover'
+            fontWeight='bold'
+          >
+            <span>Non-Partisan Delaware: Legislator Lookup</span>
+          </Link>
+        }
+        action={legData && <LegDataNav setKey={setKey} reset={reset} />}
+        
+        className={styles['Card-Header']}
+      />
+      <CardContent className={styles['Card-Body']}>
         {!legData && (
           <LookupForm setLegData={setLegData} automated={automated} />
         )}
@@ -52,7 +61,7 @@ export const App = () => {
             retry={retry}
           />
         )}
-      </Card.Body>
+      </CardContent>
     </Card>
   );
 };

@@ -1,3 +1,4 @@
+import { Button, CircularProgress, Stack, TextField } from '@mui/material';
 import {
   FormEvent,
   SetStateAction,
@@ -5,10 +6,10 @@ import {
   useEffect,
   useState
 } from 'react';
-import { Form, Button, Spinner } from 'react-bootstrap';
+
 import { GeoLocation } from '../types/GeoLocation';
 
-import './LookupForm.css';
+import styles from './LookupForm.module.css';
 
 type Automated = { address: string; run: boolean };
 
@@ -71,56 +72,51 @@ export const LookupForm = ({ setLegData, automated }: Props) => {
   }, [address, zipCode, automated, runSubmit]);
 
   return (
-    <Form className='form-container' onSubmit={handleSubmit}>
-      <Form.Group>
-        <Form.Label htmlFor='address'>Street Address:</Form.Label>
-        <Form.Control
-          name='address'
-          type='Street'
-          required
-          onChange={(e) => setAddress(e.target.value)}
-          value={address}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label htmlFor='zipCode'>Zip Code:</Form.Label>
-        <Form.Control
-          name='zipCode'
-          type='Zip'
-          required
-          onChange={(e) => setZipCode(e.target.value)}
-          value={zipCode}
-          maxLength={5}
-          onKeyPress={(event) => {
-            if (!/[0-9]/.test(event.key)) {
-              event.preventDefault();
-            }
-          }}
-        />
-      </Form.Group>
-      <div className='button-container'>
-        <Button
-          className='prevBtn'
-          type='button'
-          onClick={reset}
-          variant='danger'
-        >
-          Clear
-        </Button>
-        <Button className='nextBtn' type='submit'>
-          {!loading && 'Search'}
-          {loading && (
-            <Spinner
-              as='span'
-              animation='border'
-              size='sm'
-              role='status'
-              aria-hidden='true'
-              style={{ verticalAlign: 'middle' }}
-            />
-          )}
-        </Button>
-      </div>
-    </Form>
+    <form className={styles['form-container']} onSubmit={handleSubmit}>
+      <Stack spacing={2}>
+        <div>
+          <TextField
+            id='address'
+            label='Street Address:'
+            type='search'
+            variant='filled'
+            size='small'
+            required
+            onChange={(e) => setAddress(e.target.value)}
+            value={address}
+          />
+        </div>
+        <div>
+          <TextField
+            id='zipCode'
+            label='Zip Code:'
+            type='search'
+            variant='filled'
+            size='small'
+            required
+            onChange={(e) => setZipCode(e.target.value)}
+            value={zipCode}
+          />
+        </div>
+        <div className={styles['button-container']}>
+          <Button
+            className={styles['prevBtn']}
+            variant='contained'
+            onClick={reset}
+          >
+            Clear
+          </Button>
+          <Button variant='contained' className={styles['nextBtn']} type='submit'>
+            {!loading && 'Search'}
+            {loading && (
+              <CircularProgress
+                size={20}
+                sx={{ verticalAlign: 'middle', color: 'white' }}
+              />
+            )}
+          </Button>
+        </div>
+      </Stack>
+    </form>
   );
 };

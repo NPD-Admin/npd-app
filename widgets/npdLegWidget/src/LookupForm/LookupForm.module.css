@@ -2,23 +2,15 @@
   color: #73859d;
 }
 
-.form-container label {
-  display: block;
-  text-align: center;
-  font-weight: bold;
-  font-size: 14px;
-  margin: 5px 0 5px 0;
-}
-
 .form-container input {
   display: block;
   text-align: center;
   width: 400px;
-  padding: 0.5rem 0.8rem 0.5rem 0.8rem;
+  background-color: white;
+  opacity: 80%;
+  border-radius: 5px 5px 0 0;
   margin: auto auto 2.5px auto;
   border: 0;
-  border-radius: 5px;
-  font-size: 14px;
 }
 
 input:-webkit-autofill,
@@ -38,8 +30,8 @@ select:-webkit-autofill:focus {
 .button-container {
   display: block;
   width: 100%;
-  padding: 0rem 1rem 0.5rem 1rem;
-  border-radius: 5px;
+  /* padding: 0rem 1rem 0.5rem 1rem; */
+  /* border-radius: 5px; */
 }
 
 .prevBtn,
@@ -57,14 +49,14 @@ select:-webkit-autofill:focus {
   margin: 1rem 0 1rem 0;
   float: left;
   border-radius: 20px 20px 20px 20px;
-  background-color: #daa06d;
+  background-color: #daa06d !important;
 }
 
 .nextBtn {
   margin: 1rem 0 1rem 0;
   float: right;
   border-radius: 20px 20px 20px 20px;
-  background-color: #73859d;
+  background-color: #73859d !important;
 }
 
 .nextBtn:hover,

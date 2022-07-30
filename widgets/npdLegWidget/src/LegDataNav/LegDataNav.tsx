@@ -1,5 +1,8 @@
-import { SetStateAction } from 'react';
-import { Dropdown, DropdownButton, ButtonGroup } from 'react-bootstrap';
+import { Divider, IconButton, Menu, MenuItem } from '@mui/material';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { MouseEvent, SetStateAction, useState } from 'react';
+
+import './LegDataNav.css';
 
 type Props = {
   setKey: React.Dispatch<SetStateAction<string>>;
@@ -7,26 +10,51 @@ type Props = {
 };
 
 export const LegDataNav = ({ setKey, reset }: Props) => {
+  const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
+  const open = !!anchorElement;
+
+  const handleClick = (evt: MouseEvent<HTMLButtonElement>) => {
+    setAnchorElement(evt.currentTarget);
+  };
+
+  const handleMenu = (key: string) => {
+    if (key && key !== 'reset') setKey(key);
+    if (key && key === 'reset') reset();
+    handleClose();
+  }
+
+  const handleClose = () => {
+    setAnchorElement(null);
+  };
+
   return (
-    <DropdownButton
-      as={ButtonGroup}
-      size='sm'
-      title=''
-      menuVariant='dark'
-      variant='secondary'
-      style={{ float: 'right' }}
-    >
-      <Dropdown.Item onClick={() => setKey('addrInfo')}>
-        Address Info
-      </Dropdown.Item>
-      <Dropdown.Divider />
-      <Dropdown.Item onClick={() => setKey('rep')}>
-        Representative
-      </Dropdown.Item>
-      <Dropdown.Item onClick={() => setKey('senate')}>Senate</Dropdown.Item>
-      <Dropdown.Item onClick={() => setKey('county')}>County</Dropdown.Item>
-      <Dropdown.Divider />
-      <Dropdown.Item onClick={reset}>Reset</Dropdown.Item>
-    </DropdownButton>
+    <div className={'LegDataNav'}>
+      <IconButton
+        id='navMenuButton'
+        aria-controls={(open && 'basic-menu') || undefined}
+        aria-haspopup='true'
+        aria-expanded={(open && 'true') || undefined}
+        onClick={handleClick}
+        size='small'
+      ><KeyboardArrowDownIcon fontSize='inherit' /></IconButton>
+      <Menu
+        id='navMenu'
+        anchorEl={anchorElement}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'navMenuButton'
+        }}
+        sx={{ paddingTop: 0, paddingBottom: 0 }}
+      >
+        <MenuItem dense onClick={() => handleMenu('addrInfo')}>Address Info</MenuItem>
+        <Divider className='divider' />
+        <MenuItem dense onClick={() => handleMenu('rep')}>Representative</MenuItem>
+        <MenuItem dense onClick={() => handleMenu('senate')}>Senate</MenuItem>
+        <MenuItem dense onClick={() => handleMenu('county')}>County</MenuItem>
+        <Divider className='divider' sx={{ marginBottom: 0, marginTop: 0 }}/>
+        <MenuItem dense onClick={() => handleMenu('reset')}>Reset</MenuItem>
+      </Menu>
+    </div>
   );
 };

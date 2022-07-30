@@ -5,9 +5,11 @@
 
 .avatar {
   position: absolute;
-  top: 0px;
-  height: 100%;
-  right: 0;
+  top: 16px;
+  width: unset !important;
+  height: 160px;
+  right: 15px;
+  border-radius: 0 0.375rem 0.375rem 0;
 }
 
 .overlay {

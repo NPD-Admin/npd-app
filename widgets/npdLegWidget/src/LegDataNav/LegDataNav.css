@@ -1,0 +1,22 @@
+.LegDataNav {
+  display: inline;
+  float: right;
+  vertical-align: middle;
+}
+
+.MuiCardHeader-root {
+  margin: 0;
+}
+
+.MuiCardHeader-action {
+  margin: 0;
+  align-self: center;
+}
+
+.MuiDivider-root {
+  margin: 0 !important;
+}
+
+.MuiList-root {
+  padding: 0;
+}

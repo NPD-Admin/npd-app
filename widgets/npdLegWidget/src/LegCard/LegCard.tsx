@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Card, Spinner } from 'react-bootstrap';
 import { Legislator } from '../types/Legislator';
 
-import './LegCard.css';
+import styles from './LegCard.module.css';
+import parentStyles from '../LegViewer/LegViewer.module.css';
+import { Card, CardContent, CardMedia, Divider, Stack, Typography } from '@mui/material';
 
 type Props = { legData: Legislator; title: string };
 
@@ -37,34 +38,37 @@ export const LegCard = ({ legData, title }: Props) => {
   }, [mounted, getImage]);
 
   return (
-    <Card body className='LegViewer-Card'>
+    <Card className={parentStyles['LegViewer-Card']}>
       {!image && (
-        <div className='overlay'>
-          <Spinner className='overlay-spinner' animation='border' />
+        <div className={styles['overlay']}>
+          <div className={styles['overlay-spinner']} />
         </div>
       )}
-      <div style={{ maxWidth: '275px' }}>
-        <Card.Title>
-          {titleVariant(0)} District {legData.district}
-        </Card.Title>
-        <Card.Subtitle className='LegCard-Subtitle'>
-          {titleVariant(1)}{' '}
+      <CardContent style={{ maxWidth: '275px' }}>
+        <Typography variant='subtitle1'>
           <a href={legData.url} rel='noreferrer' target='_blank'>
+            {titleVariant(1)}{' '}
             {legData.name}
           </a>
-        </Card.Subtitle>
-        <Card.Text>
-          {legData.party === 'R' && 'Republican'}
-          {legData.party === 'D' && 'Democratic'}
-        </Card.Text>
-        <Card.Text>
-          <a href={`mailto:${legData.email}`} target='_blank' rel='noreferrer'>
-            {legData.email}
-          </a>
-        </Card.Text>
-      </div>
+        </Typography>
+        <Divider />
+        <Stack spacing={2}>
+          <Typography variant='caption' className={styles['LegCard-Subtitle']}>
+            {titleVariant(0)} District {legData.district}
+          </Typography>
+          <Typography variant='body1'>
+            {legData.party === 'R' && 'Republican'}
+            {legData.party === 'D' && 'Democratic'}
+          </Typography>
+          <Typography>
+            <a href={`mailto:${legData.email}`} target='_blank' rel='noreferrer'>
+              {legData.email}
+            </a>
+          </Typography>
+        </Stack>
+      </CardContent>
       {image && (
-        <img className='avatar' src={image} alt={`${legData.name}-avatar`} />
+        <CardMedia component='img' className={styles['avatar']} src={image} alt={`${legData.name}-avatar`} />
       )}
     </Card>
   );
