@@ -4,6 +4,7 @@ import { google, Auth, admin_directory_v1, gmail_v1, drive_v3, Common, GoogleApi
 import readline from 'readline';
 import { mkdir, readFile, unlink, writeFile } from 'fs/promises';
 import { existsSync } from 'fs';
+import { ErrorGenerator } from '../ErrorGenerator';
 
 export { Common, admin_directory_v1 };
 const scopes = [
@@ -20,7 +21,8 @@ let tokenEnvData = process.env.google_token;
 
 export class GoogleClient {
   static client: Auth.OAuth2Client;
-  static webClient: Auth.OAuth2Client;
+  
+  private static webCredentials: { web: { client_secret: string, client_id: string, redirect_uris: string }};
 
   static get google() { return (this.client && google) || 'Not ready' };
 
@@ -90,24 +92,35 @@ export class GoogleClient {
     });
   }
 
-  static async validateCode(code: string): Promise<Auth.OAuth2Client> {
-    const token = await this.client.getToken(code);
+  static async validateCode(code: string): Promise<Auth.OAuth2Client | Error> {
+    const token = await this.client.getToken(code).catch(e => ErrorGenerator.generate(e, 'Error retrieving token from code:'));
+    if (token instanceof Error) return token;
+
     this.client.setCredentials(token.tokens);
-    await mkdir(process.cwd() + '/creds');
-    await writeFile(process.cwd() + '/creds/google_token.json', JSON.stringify(token, null, 2));
+    const mkdirRes = await mkdir(process.cwd() + '/creds').catch(e => ErrorGenerator.generate(e, 'Error creating directory for token:'));
+    if (mkdirRes instanceof Error) return mkdirRes;
+
+    const writeFileRes = await writeFile(process.cwd() + '/creds/google_token.json', JSON.stringify(token, null, 2))
+      .catch(e => ErrorGenerator.generate(e, 'Error writing token file:'));
+    if (writeFileRes instanceof Error) return writeFileRes;
+
     google.options({ auth: this.client });
-    console.log(token);
-    await this.testMailer();
+    console.log('Server code validated, tokens issued:\n', token);
+
+    const mailerRes = await this.testMailer().catch(e => ErrorGenerator.generate(e, 'Failed to send mail using Google Client:'));
+    if (mailerRes instanceof Error) return mailerRes;
+
     return this.client;
   }
 
   static async retrieveUserJWT(code: string): Promise<(Auth.TokenPayload & { tokens: Auth.Credentials }) | Error> {
-    await this.getWebClient();
+    const client = await this.getWebClient();
+    if (client instanceof Error) return client;
 
-    const token = await this.webClient.getToken(code).catch() || new Error('Invalid code failed to retrieve token.');
+    const token = await client.getToken(code).catch(e => ErrorGenerator.generate(e, 'Invalid code failed to retrieve token:'));
     if (token instanceof Error) return token;
 
-    this.webClient.setCredentials(token.tokens);
+    client.setCredentials(token.tokens);
     const payload = await this.validateJWT(token.tokens.id_token!);
     if (!payload) return new Error('Failed to retrieve JWT payload from ID token.');
     if (payload instanceof Error) return payload as Error;
@@ -116,12 +129,13 @@ export class GoogleClient {
   }
 
   static async validateJWT(token: string): Promise<Auth.TokenPayload | Error> {
-    await this.getWebClient();
+    const client = await this.getWebClient();
+    if (client instanceof Error) return client;
 
-    const ticket = await this.webClient.verifyIdToken({
+    const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: this.webClient._clientId!
-    }).catch(() => {}) || new Error('Failed to verify ID token based on the code provided.');
+      audience: client._clientId!
+    }).catch(e => ErrorGenerator.generate(e, 'Failed to verify ID token based on the code provided:'));
     if (ticket instanceof Error) return ticket;
 
     const payload = ticket.getPayload();
@@ -133,31 +147,33 @@ export class GoogleClient {
   static async validateSession(tokensJSON: string) {
     try {
       const tokens = JSON.parse(tokensJSON) as Auth.Credentials;
-      await this.getWebClient();
-      this.webClient.setCredentials(tokens);
-      const payload = await this.webClient.refreshAccessToken().catch(e => {
-        console.error(e);
-        return new Error(`Error refreshing access token:\n${e}`);
-      });
+
+      const client = await this.getWebClient();
+      if (client instanceof Error) return client;
+      
+      client.setCredentials(tokens);
+
+      const payload = await client.refreshAccessToken().catch(e => ErrorGenerator.generate(e, 'Error refreshing access token:'));
       if (payload instanceof Error) return payload;
 
       return this.validateJWT(payload.credentials.id_token!);
     } catch (e) {
-      if (e instanceof SyntaxError) return new Error(`Invalid tokens JSON:\n${tokensJSON}`);
-      console.error(e);
-      return new Error(`Unknown Error Validating Session Tokens:\n${e}`);
+      if (e instanceof SyntaxError) return ErrorGenerator.generate(e, `Invalid tokens JSON:\n${tokensJSON}`);
+      return ErrorGenerator.generate(e, 'Unknown Error Validating Session Tokens:');
     }
   }
 
-  static async getWebClient(): Promise<Auth.OAuth2Client> {
-    if (this.webClient) return this.webClient;
+  static async getWebClient(): Promise<Auth.OAuth2Client | Error> {
+    const credentials = this.webCredentials ||
+      JSON.parse(process.env.google_web as string
+        || (await readFile(process.cwd() + '/creds/google_web.json')
+          .catch(e => JSON.stringify(ErrorGenerator.generate(e, 'Failed to load web client credentials:')))).toString());
+    if (credentials instanceof Error) return credentials;
 
-    const credentials = await readFile(process.cwd() + '/creds/google_web.json').catch(e => console.error('No creds file, getting from env'))
-      || process.env.google_web as string;
-    const { client_secret, client_id, redirect_uris } = JSON.parse(credentials.toString()).web;
-    this.webClient = new Auth.OAuth2Client({ clientId: client_id, clientSecret: client_secret, redirectUri: redirect_uris[0] });
+    const { client_secret, client_id, redirect_uris } = credentials.web;
+    const client = new Auth.OAuth2Client({ clientId: client_id, clientSecret: client_secret, redirectUri: redirect_uris[0] });
 
-    return this.webClient;
+    return client;
   }
 
   static async testMailer(): Promise<Error | string> {

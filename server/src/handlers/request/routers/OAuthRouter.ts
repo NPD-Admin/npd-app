@@ -26,6 +26,7 @@ export class OAuthRouter {
 
       const { name, email, picture } = payload;
       res.status(201).json({ name, email, picture });
+
       req.session.token = JSON.stringify(payload.tokens, null, 2);
       req.session.save();
     }));

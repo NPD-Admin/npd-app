@@ -31,7 +31,11 @@ export class NPDServer {
       secret: process.env.SESSION_SECRET!,
       resave: true,
       saveUninitialized: true,
-      cookie: { secure: 'auto', maxAge: 1000*60*60*24 },
+      name: `npdSessionCookie-${Math.floor(Math.random()*10e9)}`,
+      cookie: {
+        secure: 'auto',
+        maxAge: 1000*60*60*24
+      },
       store: new MemoryStore({})
     }));
 

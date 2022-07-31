@@ -26,32 +26,60 @@ Runs the NpdLegWidget UI webpack dev server.
 
 ## `npm run build`:
 
+This shouldn't be used.  Local builds use npm run build:local, production builds use npm run heroku-postbuild.
+
 ### `npm run build:local`:
+
+Builds for the local environment using .env and hard coding other build-related environment variables so that it builds correctly in that context.
 
 ### `npm run build:clean`:
 
+Deletes the existing build.
+
 ### `npm run build:server`:
+
+Builds the server.
 
 ### `npm run build:main`:
 
+Builds the main React UI.
+
 ### `npm run build:main:local`:
+
+Builds the main React UI for local deployment.
 
 ### `npm run build:widgets`:
 
+Builds any widgets discovered by a custom script and webpack.
+
 ### `npm run build:widgets:local`:
+
+Same as above, but without pruning local devDependencies that are still needed.
 
 ## `npm run prune`:
 
+Prunes devDependencies.
+
 ### `npm run prune:server`:
+
+Prunes devDependencies in the server package.
 
 ### `npm run prune:main`:
 
+Prunes devDependencies in the main React UI.
+
 ### `npm run prune:widgets`:
+
+Prunes devDependencies in the widgets root package.
 
 ## `npm run heroku-postbuild`:
 
+Runs the build customized for the Heroku build environment.  Mostly this means using *nix conventions for setting environment variables on the command line.
+
 ## `npm run prod`:
+
+Script referenced in the Heroku Procfile to start the production server.
 
 ## `npm run local`:
 
-*Charitable of you to assume any of them work...*
+Run the built server with local configurations.
