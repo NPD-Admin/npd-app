@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
+import { ErrorGenerator } from "../../utils/ErrorGenerator";
 
 export function Wrapper(cb: (req: Request, res: Response) => void) {
   return (req: Request, res: Response) => {
     try {
       cb(req, res);
     } catch (e) {
-      console.error(e);
+      const error = ErrorGenerator.generate(e, 'Error handling request:');
       res.status(503).json({
-        error: JSON.stringify(e)
+        error: error.message
       });
     }
   }

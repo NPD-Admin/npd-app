@@ -1,12 +1,19 @@
-import express, { Express } from 'express';
-import session, { MemoryStore } from 'express-session';
-import { existsSync, readdirSync } from 'fs';
+import express, { Express, Request, Response } from 'express';
+import session from 'express-session';
+import MongoStore from 'connect-mongodb-session';
+import { ServerApiVersion } from 'mongodb';
+import { existsSync } from 'fs';
 import { join } from 'path';
+
 import { APIRouter } from './handlers/request/routers/APIRouter';
 import { BotRouter } from './handlers/request/routers/BotRouter';
 import { OAuthRouter } from './handlers/request/routers/OAuthRouter';
 import { WidgetRouter } from './handlers/request/routers/WidgetRouter';
 import { NPDBot } from './NPDBot';
+import { ErrorGenerator } from './utils/ErrorGenerator';
+import { Wrapper } from './handlers/request/Wrapper';
+
+const MONTH_MS = 1000 * 60 * 60 * 24 * 30;
 
 export class NPDServer {
   static start(botInstance: NPDBot): void {
@@ -16,13 +23,22 @@ export class NPDServer {
     app.set('view engine', 'ejs');
     if (process.cwd().includes('app')) app.set('views', join(__dirname, '..', 'views'));
 
+    const mongoStore = new (MongoStore(session))({
+      uri: process.env.MONGO_URI!,
+      collection: 'sessionStorage',
+      expires: MONTH_MS,
+      connectionOptions: {
+        serverApi: ServerApiVersion.v1
+      }
+    }, error => ErrorGenerator.generate(error, 'Failed to connect to MongoDB Session Store:'));
+    mongoStore.on('error', error => ErrorGenerator.generate(error, 'Error from MongoDB Session Store:'));
+
     app.use((req, res, next) => {
       try {
         next();
       } catch (e) {
-        console.error(e);
         res.status(503).json({
-          error: JSON.stringify(e, null, 2)
+          error: ErrorGenerator.generate(e, `Uncaught error in request handler:\n${req}`)
         });
       }
     });
@@ -34,9 +50,9 @@ export class NPDServer {
       name: `npdSessionCookie-${Math.floor(Math.random()*10e9)}`,
       cookie: {
         secure: 'auto',
-        maxAge: 1000*60*60*24
+        maxAge: MONTH_MS
       },
-      store: new MemoryStore({})
+      store: mongoStore
     }));
 
     app.use(express.json());
@@ -67,6 +83,13 @@ export class NPDServer {
     //     res.status(503).send('Channel not available');
     //   }
     // })
+  
+    console.log(process.env.LE_URL, process.env.LE_CONTENT);
+    if (process.env.LE_URL && process.env.LE_CONTENT) {
+      app.get(process.env.LE_URL, Wrapper((req: Request, res: Response) => {
+        res.send(process.env.LE_CONTENT);
+      }));
+    }
 
     let buildFolder = join(__dirname, '..', 'build');
     console.log(buildFolder, existsSync(buildFolder));
