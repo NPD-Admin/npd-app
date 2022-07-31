@@ -26,7 +26,7 @@ Runs the NpdLegWidget UI webpack dev server.
 
 ## `npm run build`:
 
-This shouldn't be used.  Local builds use npm run build:local, production builds use npm run heroku-postbuild.
+Builds the server for production without the extra steps needed for Heroku performed by npm run heroku-postbuild.
 
 ### `npm run build:local`:
 

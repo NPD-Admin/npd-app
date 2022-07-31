@@ -8,7 +8,7 @@
     "dev:server": "npm run dev --prefix ./server",
     "dev:main": "npm start --prefix ./main",
     "dev:NpdLegWidget": "cd widgets/NpdLegWidget && npm start",
-    "build": "echo \"This shouldn't be used.  Local builds use npm run build:local, production builds use npm run heroku-postbuild.\"",
+    "build": "npm run build:clean && concurrently \"npm run build:server\" \"npm run build:main\" \"npm run build:widgets\"",
     "build:local": "npm run build:clean && concurrently \"npm run build:server\" \"npm run build:main:local\" \"npm run build:widgets:local\"",
     "build:clean": "rimraf dist",
     "build:server": "npm ci --prefix ./server --include=dev && npm run build --prefix ./server",
