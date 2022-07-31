@@ -2,6 +2,7 @@ import { NPDBot } from "../../NPDBot";
 import { BotEvent, EventType } from "../../types/EventTypes";
 import { IHandler } from "../../types/IHandler";
 import { TimerEvent } from "../../types/TimerEvent";
+import { ErrorGenerator } from "../../utils/ErrorGenerator";
 import { HTTPSRequest } from "../../utils/HTTPSRequest";
 
 export class PingHerokuTimer implements IHandler {
@@ -20,7 +21,7 @@ export class PingHerokuTimer implements IHandler {
 
   async callback(payload: BotEvent): Promise<any> {
     const res = await HTTPSRequest.httpsGetRequest('https://npd-server.herokuapp.com/api')
-      .catch(e => console.error('Error pinging Heroku:', e));
-    if (res) console.log('Pinged Heroku:', JSON.parse(res.toString()));
+      .catch(e => ErrorGenerator.generate(e, 'Error pinging Heroku:'));
+    if (!(res instanceof Error)) console.log('Pinged Heroku:', JSON.parse(res.toString()));
   }
 }
