@@ -32,7 +32,7 @@ export const App = () => {
   return (
     <Card sx={{ flexGrow: 1 }} className={styles['Card']}>
       <CardHeader
-        avatar={<img alt='NPD Logo' src={iconUrl} />}
+        avatar={ <img alt='NPD Logo' src={iconUrl} /> }
         title={
           <Link
             href='https://www.NonPartisanDE.org'
@@ -45,22 +45,23 @@ export const App = () => {
             <span>Non-Partisan Delaware: Legislator Lookup</span>
           </Link>
         }
-        action={legData && <LegDataNav setKey={setKey} reset={reset} />}
+        action={ legData && <LegDataNav setKey={setKey} reset={reset} /> }
         
         className={styles['Card-Header']}
       />
       <CardContent className={styles['Card-Body']}>
-        {!legData && (
-          <LookupForm setLegData={setLegData} automated={automated} />
-        )}
-        {legData && (
-          <LegViewer
-            legData={legData}
-            navKey={key}
-            reset={reset}
-            retry={retry}
-          />
-        )}
+        {
+          !legData && <LookupForm setLegData={setLegData} automated={automated} />
+        }
+        {
+          legData &&
+            <LegViewer
+              legData={legData}
+              navKey={key}
+              reset={reset}
+              retry={retry}
+            />
+        }
       </CardContent>
     </Card>
   );

@@ -39,20 +39,21 @@ export const LegCard = ({ legData, title }: Props) => {
 
   return (
     <Card className={parentStyles['LegViewer-Card']}>
-      {!image && (
-        <div className={styles['overlay']}>
-          <div className={styles['overlay-spinner']} />
-        </div>
-      )}
+      {
+        !image &&
+          <div className={styles['overlay']}>
+            <div className={styles['overlay-spinner']} />
+          </div>
+      }
       <CardContent style={{ maxWidth: '275px' }}>
         <Typography variant='subtitle1'>
           <a href={legData.url} rel='noreferrer' target='_blank'>
-            {titleVariant(1)}{' '}
+            {titleVariant(1)}<br />
             {legData.name}
           </a>
         </Typography>
         <Divider />
-        <Stack spacing={2}>
+        <Stack spacing={0.15}>
           <Typography variant='caption' className={styles['LegCard-Subtitle']}>
             {titleVariant(0)} District {legData.district}
           </Typography>
@@ -67,9 +68,10 @@ export const LegCard = ({ legData, title }: Props) => {
           </Typography>
         </Stack>
       </CardContent>
-      {image && (
-        <CardMedia component='img' className={styles['avatar']} src={image} alt={`${legData.name}-avatar`} />
-      )}
+      {
+        image &&
+          <CardMedia component='img' className={styles['avatar']} src={image} alt={`${legData.name}-avatar`} />
+      }
     </Card>
   );
 };

@@ -107,13 +107,14 @@ export const LookupForm = ({ setLegData, automated }: Props) => {
             Clear
           </Button>
           <Button variant='contained' className={styles['nextBtn']} type='submit'>
-            {!loading && 'Search'}
-            {loading && (
-              <CircularProgress
-                size={20}
-                sx={{ verticalAlign: 'middle', color: 'white' }}
-              />
-            )}
+            { !loading && 'Search' }
+            {
+              loading &&
+                <CircularProgress
+                  size={20}
+                  sx={{ verticalAlign: 'middle', color: 'white' }}
+                />
+            }
           </Button>
         </div>
       </Stack>

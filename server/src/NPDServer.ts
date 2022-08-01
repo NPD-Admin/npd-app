@@ -30,7 +30,7 @@ export class NPDServer {
       connectionOptions: {
         serverApi: ServerApiVersion.v1
       }
-    }, error => ErrorGenerator.generate(error, 'Failed to connect to MongoDB Session Store:'));
+    }, error => error && ErrorGenerator.generate(error, 'Failed to connect to MongoDB Session Store:'));
     mongoStore.on('error', error => ErrorGenerator.generate(error, 'Error from MongoDB Session Store:'));
 
     app.use((req, res, next) => {

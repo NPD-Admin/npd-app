@@ -46,14 +46,10 @@ export const LegViewer = ({ legData, navKey, reset, retry }: Props) => {
 
   return (
     <>
-      {navKey === 'addrInfo' && (
-        <AddressCard address={legData.address} ed={legData.ED} sd={legData.SD} />
-      )}
-      {navKey === 'rep' && (
-        <LegCard legData={legData.RD} title='Representative' />
-      )}
-      {navKey === 'senate' && <LegCard legData={legData.SD} title='Senat' />}
-      {navKey === 'county' && <CountyCard countyData={legData.CD} />}
+      { navKey === 'addrInfo' && <AddressCard address={legData.address} ed={legData.ED} sd={legData.SD} /> }
+      { navKey === 'rep' && <LegCard legData={legData.RD} title='Representative' /> }
+      { navKey === 'senate' && <LegCard legData={legData.SD} title='Senat' /> }
+      { navKey === 'county' && <CountyCard countyData={legData.CD} /> }
     </>
   );
 };

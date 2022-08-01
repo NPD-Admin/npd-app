@@ -50,14 +50,14 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       if (!loaded.current) {
-        const res = await (await fetch('/api')).json();
-        setData(res);
-
         const session = await (await fetch('/oauth/session')).json();
         if (session.error) await logout();
 
         const status = await (await fetch('/bot')).json();
         setBotStatus(status.active);
+
+        const res = await (await fetch('/api')).json();
+        setData(res);
       }
     }
     fetchData();
@@ -72,31 +72,38 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
-        <p><a
-          className='App-link'
-          href='/widgets'
-        >
-          View Widgets
-        </a></p>
-        <p>The NPD Bot is: {(botStatus && 'Active') || 'Disabled'}</p>
-        { loginData &&
-          <button
-            onClick={toggleBot}  
-          >{(botStatus && 'Disable') || 'Enable'}</button>
+        <p>
+          <a
+            className='App-link'
+            href='/widgets'
+          >
+            View Widgets
+          </a>
+        </p>
+        {
+          data && <p>The NPD Bot is: {(botStatus && 'Active') || 'Disabled'}</p>
+        }
+        {
+          data && loginData &&
+            <button
+              onClick={toggleBot}  
+            >{(botStatus && 'Disable') || 'Enable'}</button>
         }
         <div>
-          { !loginData &&
-            <button
-              onClick={() => handleLogin()}
-            >Login</button>
-          }
-          { loginData &&
-            <>
-              <p>{loginData.name}<br/>Logged In</p>
+          {
+            !loginData &&
               <button
-                onClick={logout}
-              >Logout</button>
-            </>
+                onClick={() => handleLogin()}
+              >Login</button>
+          }
+          {
+            loginData &&
+              <>
+                <p>{loginData.name}<br/>Logged In</p>
+                <button
+                  onClick={logout}
+                >Logout</button>
+              </>
           }
         </div>
       </header>

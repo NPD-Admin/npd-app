@@ -24,13 +24,14 @@ export const CountyCard = ({ countyData }: Props) => {
           <Typography variant='body1'>
             {countyData.title} {countyData.commissioner}
           </Typography>
-          {countyData.atLarge!.trim() && (
-            <>
-              <Typography variant='body1'>
-                {countyData.atLargeTitle} {countyData.atLarge} &mdash; At Large
-              </Typography>
-            </>
-          )}
+          {
+            countyData.atLarge!.trim() &&
+              <>
+                <Typography variant='body1'>
+                  {countyData.atLargeTitle} {countyData.atLarge} &mdash; At Large
+                </Typography>
+              </>
+          }
         </Stack>
       </CardContent>
     </Card>

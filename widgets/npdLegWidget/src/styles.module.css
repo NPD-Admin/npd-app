@@ -27,6 +27,10 @@
   text-decoration: underline;
 }
 
+.Card-Header a:visited {
+  text-decoration: none;
+}
+
 .Card-Header a > span {
   margin: 0 0 0 -16px;
 }
