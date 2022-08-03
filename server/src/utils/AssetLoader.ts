@@ -4,7 +4,10 @@ import { Document, WithId } from 'mongodb';
 
 import { MongoCollection } from './MongoCollection';
 
-type Asset = WithId<Document> & { identifier: string };
+export type Asset = WithId<Document> & {
+  type: string;
+  identifier: string;
+};
 type AssetFile = { collection: string, data: Asset[] };
 
 export class AssetLoader {

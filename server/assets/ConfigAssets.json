@@ -32,5 +32,23 @@
         }
       }]
     }
+  }, {
+    "type": "DonationEmbedAsset",
+    "identifier": "DonationEmbedAsset.814614335229263945",
+    "guildId": "814614335229263945",
+    "msgJson": {
+      "embed": {
+          "title": "Donate to Non-Partisan Delaware!",
+          "description": "You can donate to Non-Partisan Delaware through [PayPal](https://paypal.me/NonPartisanDE).\n\nWe also accept checks delivered in person or mailed to:\n*Non-Partisan Delaware*\n*PO Box 1021*\n*Dover, DE 19903*\n\nWe are also permitted under Delaware Campaign Finance laws to receive donations of less than $100 in cash.\n\nWe *__**deeply**__* appreciate your support!\n\nThank you,",
+          "url": "https://paypal.me/NonPartisanDE",
+          "footer": {
+              "text": "Non-Partisan Delaware",
+              "icon_url": "https://raw.githubusercontent.com/NPD-Admin/Non-Partisan-Delaware-Documents/main/Branding%20Assets/profile.png"
+          },
+          "thumbnail": {
+              "url": "https://raw.githubusercontent.com/NPD-Admin/Non-Partisan-Delaware-Documents/main/Branding%20Assets/profile.png"
+          }
+      }
+    }
   }]
 }
