@@ -37,7 +37,7 @@
     "identifier": "DonationEmbedAsset.814614335229263945",
     "guildId": "814614335229263945",
     "msgJson": {
-      "embed": {
+      "embeds": [{
           "title": "Donate to Non-Partisan Delaware!",
           "description": "You can donate to Non-Partisan Delaware through [PayPal](https://paypal.me/NonPartisanDE).\n\nWe also accept checks delivered in person or mailed to:\n*Non-Partisan Delaware*\n*PO Box 1021*\n*Dover, DE 19903*\n\nWe are also permitted under Delaware Campaign Finance laws to receive donations of less than $100 in cash.\n\nWe *__**deeply**__* appreciate your support!\n\nThank you,",
           "url": "https://paypal.me/NonPartisanDE",
@@ -48,7 +48,88 @@
           "thumbnail": {
               "url": "https://raw.githubusercontent.com/NPD-Admin/Non-Partisan-Delaware-Documents/main/Branding%20Assets/profile.png"
           }
-      }
+      }]
+    }
+  }, {
+    "type": "EmbedLinksAsset",
+    "identifier": "EmbedLinksAsset.814614335229263945",
+    "guildId": "814614335229263945",
+    "msgJson": {
+      "embeds": [{
+          "title": "Welcome to Non-Partisan Delaware!",
+          "description": "You may find the links below helpful connecting with Non-Partisan Delaware through Social Media and the Web:",
+          "url": "https://www.NonPartisanDE.org",
+          "footer": {
+              "text": "Non-Partisan Delaware",
+              "icon_url": "https://raw.githubusercontent.com/NPD-Admin/Non-Partisan-Delaware-Documents/main/Branding%20Assets/profile.png"
+          },
+          "thumbnail": {
+              "url": "https://raw.githubusercontent.com/NPD-Admin/Non-Partisan-Delaware-Documents/main/Branding%20Assets/profile.png"
+          }
+      }]
+    }
+  }, {
+    "type": "EmbeddedLinkAsset",
+    "identifier": "EmbeddedLinkAsset.814614335229263945.0001",
+    "guildId": "814614335229263945",
+    "order": 0,
+    "fieldJson": {
+      "name": "Non-Partisan Delaware Web Site:",
+      "value": "https://www.NonPartisanDE.org"
+    }
+  }, {
+    "type": "EmbeddedLinkAsset",
+    "identifier": "EmbeddedLinkAsset.814614335229263945.0001",
+    "guildId": "814614335229263945",
+    "order": 1,
+    "fieldJson": {
+      "name": "Non-Partisan Delaware Discord: (you are here)",
+      "value": "https://discord.gg/j5nRAFZEuZ"
+    }
+  }, {
+    "type": "EmbeddedLinkAsset",
+    "identifier": "EmbeddedLinkAsset.814614335229263945.0001",
+    "guildId": "814614335229263945",
+    "order": 2,
+    "fieldJson": {
+      "name": "Non-Partisan Delaware Facebook Page:",
+      "value": "https://www.facebook.com/NonPartisanDE"
+    }
+  }, {
+    "type": "EmbeddedLinkAsset",
+    "identifier": "EmbeddedLinkAsset.814614335229263945.0001",
+    "guildId": "814614335229263945",
+    "order": 3,
+    "fieldJson": {
+      "name": "Non-Partisan Delaware Twitter:",
+      "value": "https://twitter.com/NonPartisanDE"
+    }
+  }, {
+    "type": "EmbeddedLinkAsset",
+    "identifier": "EmbeddedLinkAsset.814614335229263945.0001",
+    "guildId": "814614335229263945",
+    "order": 4,
+    "fieldJson": {
+      "name": "Non-Partisan Delaware InstaGram:",
+      "value": "https://www.instagram.com/nonpartisande/"
+    }
+  }, {
+    "type": "EmbeddedLinkAsset",
+    "identifier": "EmbeddedLinkAsset.814614335229263945.0001",
+    "guildId": "814614335229263945",
+    "order": 5,
+    "fieldJson": {
+      "name": "Non-Partisan Delaware TikTok:",
+      "value": "https://www.tiktok.com/@nonpartisande"
+    }
+  }, {
+    "type": "EmbeddedLinkAsset",
+    "identifier": "EmbeddedLinkAsset.814614335229263945.0001",
+    "guildId": "814614335229263945",
+    "order": 6,
+    "fieldJson": {
+      "name": "Non-Partisan Delaware PayPal:",
+      "value": "https://paypal.me/NonPartisanDE"
     }
   }]
 }
