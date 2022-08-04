@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
-const clientId = '540172091891-pkpfk767niedp0cv16cdmtlgonmt7u9a.apps.googleusercontent.com';
+const clientId = '627761513182-s9us9hlmovt8nsc5stcadarfsoo2boh7.apps.googleusercontent.com';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

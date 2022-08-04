@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { CodeResponse, googleLogout, useGoogleLogin } from '@react-oauth/google';
 import logo from './logo.svg';
 import './App.css';
-import { CodeResponse, googleLogout, useGoogleLogin } from '@react-oauth/google';
 
 function App() {
   const loaded = useRef(false);
+  
   const [botStatus, setBotStatus] = useState(false);
   const [data, setData] = useState('');
   const [loginData, setLoginData] = useState(
@@ -13,6 +14,7 @@ function App() {
 
   const toggleBot = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const res = await (await fetch('/bot/setState')).json();
+    if (res.error) return;
     setBotStatus(res.active);
   }
 

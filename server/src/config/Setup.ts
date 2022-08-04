@@ -31,6 +31,7 @@ export default class Setup {
     return async () => {
       await this.registerEventHandlers();
       await this.loadConfigs();
+      await GoogleClient.login();
       await this.displayStartupMessage();
     }
   }
@@ -72,11 +73,11 @@ export default class Setup {
     await Promise.all(this.botInstance.handlers.map(handler => handler.init && handler.init(this.botInstance)));
     console.log(blueLog`    ...done.\n`);
 
-    console.log(`\x1b[32m  (${commandHandlers.length}) Commands     Loaded.`);
-    console.log(`  (${interactionHandlers.length}) Interactions Loaded.`);
-    console.log(`  (${messageHandlers.length}) Messages     Loaded.`);
-    console.log(`  (${miscHandlers.length}) Misc         Loaded.`);
-    console.log(`  (${timerHandlers.length}) Timers       Loaded.\x1b[0m\n`);
+    console.log(`\x1b[32m  (${commandHandlers.length}) Commands     Loaded.\x1b[0m`);
+    console.log(`\x1b[32m  (${interactionHandlers.length}) Interactions Loaded.\x1b[0m`);
+    console.log(`\x1b[32m  (${messageHandlers.length}) Messages     Loaded.\x1b[0m`);
+    console.log(`\x1b[32m  (${miscHandlers.length}) Misc         Loaded.\x1b[0m`);
+    console.log(`\x1b[32m  (${timerHandlers.length}) Timers       Loaded.\x1b[0m\n`);
     console.log(`\x1b[35m  (${this.botInstance.handlers.length}) Handlers Total.\x1b[0m`);
     console.log(`\x1b[35m  (${Object.keys(assetList).reduce((p, c) => assetList[c].length + p, 0)}) Assets Loaded.\x1b[0m`);
     console.log(blueLog`  ...done.\n`);
@@ -163,6 +164,5 @@ export default class Setup {
     console.log(`${Array.from(guilds.map(guild => `(${guild.id}) ${guild.name}`)).join('\n')}\n`);
   
     console.log(blueLog`Ready...\n\n\n`);
-    await GoogleClient.login();
   }
 }

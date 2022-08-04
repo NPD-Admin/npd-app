@@ -10,11 +10,10 @@ export { Common, admin_directory_v1 };
 const scopes = [
   'https://www.googleapis.com/auth/userinfo.profile',
   'https://www.googleapis.com/auth/userinfo.email',
+  
   'https://mail.google.com/',
   'https://www.googleapis.com/auth/drive',
-  'https://www.googleapis.com/auth/blogger',
-  'https://www.googleapis.com/auth/admin.directory.group.member',
-  'https://www.googleapis.com/auth/admin.directory.group'
+  'https://www.googleapis.com/auth/blogger'
 ];
 
 let tokenEnvData = process.env.google_token;

@@ -12,6 +12,7 @@ export class BotRouter {
     });
 
     router.get('/setState', Wrapper(async (req: Request, res: Response) => {
+      if (!req.session.token) return res.status(401).json({ error: 'Not authenticated.' });
       const user = await GoogleClient.validateSession(req.session.token!);
 
       if (!user || user instanceof Error) return res.status(503).json({ error: 'Error retrieving session user information.' });
