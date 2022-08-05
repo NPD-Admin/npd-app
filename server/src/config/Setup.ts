@@ -137,7 +137,7 @@ export default class Setup {
       console.log(`${srcDir}: ${file.name}`);
       if (file.name.endsWith('.ts') || file.name.endsWith('.js')) {
         const fileExports = require(join(srcDir, file.name)) as { [key: string]: any };
-        const fileClasses = Object.values(fileExports);
+        const fileClasses = Object.values(fileExports).filter(c => typeof c === 'function');
         const fileInstances = fileClasses.map(fileClass => (new (fileClass as ObjectConstructor)() as IHandler));
         return fileInstances;
       } else if (file.name.endsWith('.json')) {

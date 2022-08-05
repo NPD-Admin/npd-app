@@ -12,7 +12,8 @@ export type BotConfig = {
   guildId: Snowflake,
   logChannelId: Snowflake,
   guild: Guild | null,
-  logChannel: TextChannel | null
+  logChannel: TextChannel | null,
+  archivedChannelCategory: Snowflake[]
 };
 
 export class NPDBot {

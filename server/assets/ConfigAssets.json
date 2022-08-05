@@ -4,7 +4,8 @@
     "type": "BotConfig",
     "identifier": "BotConfig.814614335229263945",
     "guildId": "814614335229263945",
-    "logChannelId": "822343177104261160"
+    "logChannelId": "822343177104261160",
+    "archivedChannelCategory": ["836205365598224434"]
   }, {
     "type": "PruningMessageAsset",
     "identifier": "PruningMessageAsset.814614335229263945",

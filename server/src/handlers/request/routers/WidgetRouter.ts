@@ -34,7 +34,6 @@ export class WidgetRouter {
 
         const fileList = readdirSync(path.join(...root, ...tail), { withFileTypes: true });
         const widgetList = fileList.map(file => ({ name: file.name.split('.')[0], url: file.name }));
-        console.log(widgetList);
         
         res.render('pages/index', { widgetList });
       } else res.render(`pages/widget`, { page: req.params.page });

@@ -10,7 +10,7 @@ export { Common, admin_directory_v1 };
 const scopes = [
   'https://www.googleapis.com/auth/userinfo.profile',
   'https://www.googleapis.com/auth/userinfo.email',
-  
+
   'https://mail.google.com/',
   'https://www.googleapis.com/auth/drive',
   'https://www.googleapis.com/auth/blogger'
@@ -54,7 +54,7 @@ export class GoogleClient {
           scope: scopes.join(' ')
         });
         console.log(authUrl);
-        if (process.env.google_creds)
+        if (process.env.google_creds || true)
           return resolve(console.error('Please authenticate your Google Account then submit your code as a query string to {HOST}/oauth.'));
 
         const rl = readline.createInterface({
@@ -96,8 +96,11 @@ export class GoogleClient {
     if (token instanceof Error) return token;
 
     this.client.setCredentials(token.tokens);
-    const mkdirRes = await mkdir(process.cwd() + '/creds').catch(e => ErrorGenerator.generate(e, 'Error creating directory for token:'));
-    if (mkdirRes instanceof Error) return mkdirRes;
+
+    if (!existsSync(process.cwd() + '/creds')) {
+      const mkdirRes = await mkdir(process.cwd() + '/creds').catch(e => ErrorGenerator.generate(e, 'Error creating directory for token:'));
+      if (mkdirRes instanceof Error) return mkdirRes;
+    }
 
     const writeFileRes = await writeFile(process.cwd() + '/creds/google_token.json', JSON.stringify(token, null, 2))
       .catch(e => ErrorGenerator.generate(e, 'Error writing token file:'));

@@ -20,13 +20,13 @@ export class PingHerokuTimer implements IHandler {
   listeningFor(evt: BotEvent) { return true; }
 
   async callback(payload: BotEvent): Promise<any> {
-    const res = await HTTPSRequest.httpsGetRequest('https://npd-server.herokuapp.com/api')
-      .catch(e => ErrorGenerator.generate(e, 'Error pinging Heroku:'));
     try {
+      const res = await HTTPSRequest.httpsGetRequest('https://npd-server.herokuapp.com/api')
+        .catch(e => ErrorGenerator.generate(e, 'Error pinging Heroku:'));
       const response = JSON.parse(res.toString());
-      if (!(res instanceof Error)) console.log('Pinged Heroku:', JSON.parse(res.toString()));
+      if (!(res instanceof Error)) console.log('Pinged Heroku:', response);
     } catch (e) {
-      console.error(`Error pinging Heroku and parsing response.  Received:\n${res.toString()}\n${e}`);
+      console.error(`Error pinging Heroku and parsing response:\n${e}`);
     }
   }
 }
