@@ -12,7 +12,9 @@ const INTENTS: RecursiveReadonlyArray<any> = [
 ];
 
 const PARTIALS: PartialTypes[] = [
-  Constants.PartialTypes.CHANNEL
+  Constants.PartialTypes.CHANNEL,
+  Constants.PartialTypes.MESSAGE,
+  Constants.PartialTypes.REACTION
 ]
 
 export { INTENTS, PARTIALS };

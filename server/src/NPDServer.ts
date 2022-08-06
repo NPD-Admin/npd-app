@@ -26,6 +26,7 @@ export class NPDServer {
     const mongoStore = new (MongoStore(session))({
       uri: process.env.MONGO_URI!,
       collection: 'sessionStorage',
+      databaseName: 'NPD-Data',
       expires: MONTH_MS,
       connectionOptions: {
         serverApi: ServerApiVersion.v1
@@ -47,7 +48,7 @@ export class NPDServer {
       secret: process.env.SESSION_SECRET!,
       resave: true,
       saveUninitialized: true,
-      name: `npdSessionCookie-${Math.floor(Math.random()*10e9)}`,
+      name: `npdSessionCookie`,
       cookie: {
         secure: 'auto',
         maxAge: MONTH_MS

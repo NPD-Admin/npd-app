@@ -1,4 +1,4 @@
-import { Client, DiscordAPIError, TextChannel } from 'discord.js';
+import { Client, DiscordAPIError, MessageReaction, Presence, TextChannel, User } from 'discord.js';
 import { readdirSync, Dirent } from 'fs';
 import { join, normalize } from 'path';
 
@@ -7,6 +7,7 @@ import { IHandler } from '../types/IHandler';
 import { MongoCollection, WithId } from '../utils/MongoCollection';
 import { AssetLoader } from '../utils/AssetLoader';
 import { GoogleClient } from '../utils/Google/GoogleClient';
+import { PresenceChange, Reaction } from '../types/EventTypes';
 
 function blueLog(args: TemplateStringsArray) { return ['\x1b[34m', ...args, '\x1b[0m'].join(''); }
 
@@ -25,6 +26,9 @@ export default class Setup {
     this.client.on('interactionCreate', interaction => this.botInstance.handleInteractions(interaction));
     this.client.on('messageCreate', message => this.botInstance.handleMessages(message));
     this.client.on('guildMemberAdd', member => this.botInstance.handleMember(member));
+    this.client.on('presenceUpdate', (o, n) => this.botInstance.handlePresence(new PresenceChange(o as Presence, n as Presence)));
+    this.client.on('messageReactionAdd', (r, u) => this.botInstance.handleReaction(new Reaction(r as MessageReaction, u as User)));
+    this.client.on('messageReactionRemove', (r, u) => this.botInstance.handleReaction(new Reaction(r as MessageReaction, u as User)));
   }
 
   private completeSetup(): () => void {
@@ -59,6 +63,7 @@ export default class Setup {
     const commandHandlers = await this.load('handlers/commands') as IHandler[];
     const interactionHandlers = await this.load('handlers/interactions') as IHandler[];
     const messageHandlers = await this.load('handlers/messages') as IHandler[];
+    const reactionHandlers = await this.load('handlers/reactions') as IHandler[];
     const miscHandlers = await this.load('handlers/misc') as IHandler[];
     const timerHandlers = await this.load('handlers/timers') as IHandler[];
     console.log(blueLog`    ...done.\n`)
@@ -66,6 +71,7 @@ export default class Setup {
     this.botInstance.handlers = [...this.botInstance.handlers, ...commandHandlers];
     this.botInstance.handlers = [...this.botInstance.handlers, ...interactionHandlers];
     this.botInstance.handlers = [...this.botInstance.handlers, ...messageHandlers];
+    this.botInstance.handlers = [...this.botInstance.handlers, ...reactionHandlers];
     this.botInstance.handlers = [...this.botInstance.handlers, ...miscHandlers];
     this.botInstance.handlers = [...this.botInstance.handlers, ...timerHandlers];
 
@@ -73,13 +79,15 @@ export default class Setup {
     await Promise.all(this.botInstance.handlers.map(handler => handler.init && handler.init(this.botInstance)));
     console.log(blueLog`    ...done.\n`);
 
+    //TODO: Automate spacing.
     console.log(`\x1b[32m  (${commandHandlers.length}) Commands     Loaded.\x1b[0m`);
-    console.log(`\x1b[32m  (${interactionHandlers.length}) Interactions Loaded.\x1b[0m`);
-    console.log(`\x1b[32m  (${messageHandlers.length}) Messages     Loaded.\x1b[0m`);
-    console.log(`\x1b[32m  (${miscHandlers.length}) Misc         Loaded.\x1b[0m`);
-    console.log(`\x1b[32m  (${timerHandlers.length}) Timers       Loaded.\x1b[0m\n`);
+    console.log(`\x1b[32m  (${interactionHandlers.length})  Interactions Loaded.\x1b[0m`);
+    console.log(`\x1b[32m  (${messageHandlers.length})  Messages     Loaded.\x1b[0m`);
+    console.log(`\x1b[32m  (${reactionHandlers.length})  Reactions    Loaded.\x1b[0m`);
+    console.log(`\x1b[32m  (${miscHandlers.length})  Misc         Loaded.\x1b[0m`);
+    console.log(`\x1b[32m  (${timerHandlers.length})  Timers       Loaded.\x1b[0m\n`);
     console.log(`\x1b[35m  (${this.botInstance.handlers.length}) Handlers Total.\x1b[0m`);
-    console.log(`\x1b[35m  (${Object.keys(assetList).reduce((p, c) => assetList[c].length + p, 0)}) Assets Loaded.\x1b[0m`);
+    console.log(`\x1b[35m  (${Object.keys(assetList).reduce((p, c) => assetList[c].length + p, 0)}) Assets   Total.\x1b[0m`);
     console.log(blueLog`  ...done.\n`);
 
     await this.registerCommands(commandHandlers);
@@ -100,6 +108,7 @@ export default class Setup {
       if (commands.size) console.log(commands.map(command => command.name).join(','));
 
       try {
+        //TODO: Takes too long.  Cache these.
         await Promise.all(commandHandlers.map(command => commandMgr.create(command.config)));
         console.log(`Added   (${commandHandlers.length}) Guild Commands to:   ${(await guild).name} (${(await guild).id})`);
         console.log(commandHandlers.map(command => command.config.name).join(', '));
