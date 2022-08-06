@@ -55,7 +55,7 @@ export class SeenTracker {
       const presence = payload.guild?.presences.resolve(m.id);
       if (presence?.status === 'online') userData.seenData = '**right now**';
       else if (!userData.lastSeen && !presence) userData.seenData = '*never*';
-      else userData.seenData = `at *${new Date(userData.lastSeen).toLocaleString('en-us', { hour12: false })}*`;
+      else userData.seenData = `at *${new Date(userData.lastSeen).toLocaleString('en-us', { hour12: false, timeZone: 'America/New_York' })}*`;
 
       return userData;
     });
