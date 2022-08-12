@@ -1,6 +1,12 @@
+interface ErrorProps {
+  e?: any;
+  message: string;
+}
+
 export class ErrorGenerator {
-  static generate(e: any, message: string) {
-    console.error(message, e);
+  static generate({ e, message }: ErrorProps) {
+    console.error(message);
+    if (e) console.error(e);
     return new Error(`${message}\n${e}`);
   }
 }

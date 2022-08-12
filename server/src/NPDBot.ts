@@ -1,19 +1,21 @@
-import { Client, CommandInteraction, Guild, GuildMember, Interaction, Message, Snowflake, TextChannel } from 'discord.js';
+import { Client, CommandInteraction, Guild, Interaction, Snowflake, TextChannel } from 'discord.js';
 
 import Setup from './config/Setup';
 
 import { INTENTS as intents, PARTIALS as partials } from './config/ClientConfig';
-import { IHandler } from './types/IHandler';
-import { BotEvent, EventType, PresenceChange, Reaction } from './types/EventTypes';
-import { WithId } from './utils/MongoCollection';
+import { BaseHandler, IHandler } from './types/IHandler';
+import { BotEvent } from './types/EventTypes';
+import { WithId } from './utils/MongoConnection';
+import { ErrorGenerator } from './utils/ErrorGenerator';
 
 export type BotConfig = {
-  type: 'BotConfig',
-  guildId: Snowflake,
-  logChannelId: Snowflake,
-  guild: Guild | null,
-  logChannel: TextChannel | null,
-  archivedChannelCategory: Snowflake[]
+  type: 'BotConfig';
+  guildId: Snowflake;
+  logChannelId: Snowflake;
+  archivedChannelCategory: Snowflake[];
+  twitterFeederChannelId: Snowflake;
+  guild: Guild | null;
+  logChannel: TextChannel | null;
 };
 
 export class NPDBot {
@@ -26,24 +28,21 @@ export class NPDBot {
 
   getConfig(guildId: Snowflake): WithId<BotConfig> | undefined { return this.configs.find(config => config.guildId === guildId); }
 
-  private async handle(evtPayload: BotEvent, type: EventType): Promise<void | Error[]> {
-    if (!this.isActive) return console.log('Bot disabled.');
-    const handlers = this.handlers.filter(handler => handler.type === type && handler.listeningFor(evtPayload));
-    return await Promise.all(handlers.map(handler => handler.callback(evtPayload))).catch(console.error);
+  async handle(evtPayload: BotEvent): Promise<void> {
+    if (!this.isActive) return console.log('Bot Disabled.');
+      
+    const result = await Promise.all(this.handlers.map(handler =>
+      BaseHandler.chooseEventTypeFilter(evtPayload) === handler.type
+      && handler.listeningFor(evtPayload)
+      && handler.callback(evtPayload))
+    ).catch(e => [ErrorGenerator.generate({ e, message: 'Error executing callbacks:' })]);
+    
+    if (evtPayload instanceof Interaction && evtPayload.isRepliable() && !evtPayload.replied) {
+      await this.interactionErrorHandler(evtPayload, result);
+    }
   }
 
-  async handleReaction(reaction: Reaction): Promise<void> { this.handle(reaction, EventType.REACTION); }
-  async handlePresence(change: PresenceChange): Promise<void> { this.handle(change, EventType.PRESENCE); }
-  async handleMessages(message: Message): Promise<void> { this.handle(message, EventType.MESSAGE); }
-  async handleMember(member: GuildMember): Promise<void> { this.handle(member, EventType.MEMBER); }
-  async handleInteractions(interaction: Interaction): Promise<void> {
-    const type: EventType = (interaction.isCommand() && EventType.COMMAND) || EventType.INTERACTION;
-    const result = await this.handle(interaction, type);
-
-    if (this.isActive) await this.defaultInteractionHandler(interaction, result);
-  }
-
-  private async defaultInteractionHandler(interaction: Interaction, result: void | Error[]): Promise<void> {
+  private async interactionErrorHandler(interaction: Interaction, result: void | Error[]): Promise<void> {
     if (interaction.isRepliable() && !interaction.replied) {
       if ((result instanceof Array<Error>) && (result as Array<Error>).length && result.some(c => c)) {
         await interaction.reply({ ephemeral: true, content: `Encountered error(s) processing interaction:\n${result.map(e => e && e.message).join('\n\n')}` });

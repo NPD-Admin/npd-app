@@ -1,13 +1,13 @@
 import { OutgoingHttpHeaders } from "http";
 import { HTTPSRequest } from "./HTTPSRequest";
-import { MongoCollection } from "./MongoCollection";
+import { Collection, MongoConnection } from "./MongoConnection";
 
 export class MailerLite {
-  private static assetCollection: MongoCollection;
+  private static assetCollection: Collection;
 
-  private static async getAssetCollection(): Promise<MongoCollection> {
+  private static async getAssetCollection(): Promise<Collection> {
     if (this.assetCollection) return this.assetCollection;
-    this.assetCollection = await MongoCollection.getCollection('assets');
+    this.assetCollection = MongoConnection.getCollection('assets');
     return this.assetCollection;
   }
 

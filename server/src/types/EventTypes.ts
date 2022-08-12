@@ -1,35 +1,22 @@
 import { GuildMember, Interaction, Message, MessageReaction, PartialMessageReaction, PartialUser, Presence, User } from 'discord.js';
 import { TimerEvent } from './TimerEvent';
 
-
-
-
-
-
-
-
 export enum EventType {
   MISC,
   COMMAND,
   INTERACTION,
   MEMBER,
   MESSAGE,
-  TIMER,
   PRESENCE,
-  REACTION
+  REACTION,
+  TIMER
 }
 
-export type TimerConfig = {
-  time?: string,
-  frequency: number,
-  name: string
-};
-
 export class PresenceChange {
-  o: Presence;
+  o: Presence | null;
   n: Presence;
 
-  constructor(o: Presence, n: Presence) {
+  constructor(o: Presence | null, n: Presence) {
     this.o = o; this.n = n;
   }
 
@@ -37,17 +24,18 @@ export class PresenceChange {
 }
 
 export class Reaction {
-  r: MessageReaction | PartialMessageReaction;
-  u: User | PartialUser;
+  r: MessageReaction;
+  u: User;
 
   constructor(r: MessageReaction | PartialMessageReaction, u: User | PartialUser) {
-    this.r = r; this.u = u;
+    this.r = r as MessageReaction; this.u = u as User;
   }
 
   toJSON() { return [this.r?.toJSON(), this.u?.toJSON()] }
 }
 
-export type BotEvent = Message |
+export type BotEvent =
+  Message |
   Interaction |
   GuildMember |
   TimerEvent |

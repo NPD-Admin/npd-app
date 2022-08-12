@@ -11,7 +11,7 @@ export class TimerEvent {
   async timeCheck(callback: (payload: TimerEvent) => Promise<any>): Promise<void> {
     if (!this.setNext) {
       await callback(this);
-      setTimeout(async () => await this.timeCheck(callback), this.interval);
+      setTimeout(async () => await this.timeCheck(callback), this.precision);
     } else {
       const now = new Date();
       const time = now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0');

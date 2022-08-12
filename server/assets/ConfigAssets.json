@@ -5,7 +5,8 @@
     "identifier": "BotConfig.814614335229263945",
     "guildId": "814614335229263945",
     "logChannelId": "822343177104261160",
-    "archivedChannelCategory": ["836205365598224434"]
+    "archivedChannelCategory": ["836205365598224434"],
+    "twitterFeederChannelId": "1005775830607216640"
   }, {
     "type": "PruningMessageAsset",
     "identifier": "PruningMessageAsset.814614335229263945",
@@ -27,7 +28,7 @@
     "msgJson": {
       "embeds": [{
         "title": "REMINDER: Complete Onboarding",
-        "description": "Prospective members of Non-Partisan Delaware who wish to be considered for full membership, or who just want to be added to our contact lists to receive updates from NPD, must complete the Onboarding Process in $$onboardingChannel$$.  Guests who do not complete Onboarding will be removed after 7 days of inactivity.",
+        "description": "Prospective members of Non-Partisan Delaware who wish to be considered for full membership, or who just want to be added to our contact lists to receive updates from NPD, must complete the Onboarding Process in $$onboardingChannelId$$.  Guests not completing Onboarding may be pruned after 7 days of inactivity.",
         "thumbnail": {
           "url": "https://raw.githubusercontent.com/NPD-Admin/Non-Partisan-Delaware-Documents/main/Branding%20Assets/profile.png"
         }

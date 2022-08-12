@@ -1,7 +1,32 @@
 import { Client, GuildMember, Message, MessagePayload, MessageTarget, PermissionFlags, Permissions, User } from "discord.js";
-import { ADVISOR_PERMISSIONS, OBSERVER_PERMISSIONS, PARTICIPANT_PERMISSIONS } from "../handlers/commands/Channel";
 
-const FLAGS = Permissions.FLAGS;
+export const FLAGS = Permissions.FLAGS;
+
+export const OBSERVER_PERMISSIONS =
+  FLAGS.VIEW_CHANNEL |
+  FLAGS.CONNECT |
+  FLAGS.READ_MESSAGE_HISTORY;
+
+export const ADVISOR_PERMISSIONS =
+  OBSERVER_PERMISSIONS |
+  FLAGS.SPEAK |
+  FLAGS.USE_VAD |
+  FLAGS.START_EMBEDDED_ACTIVITIES |
+  FLAGS.STREAM |
+  FLAGS.SEND_MESSAGES |
+  FLAGS.ADD_REACTIONS |
+  FLAGS.MENTION_EVERYONE |
+  FLAGS.ATTACH_FILES |
+  FLAGS.EMBED_LINKS |
+  FLAGS.USE_EXTERNAL_EMOJIS |
+  FLAGS.CREATE_PRIVATE_THREADS |
+  FLAGS.CREATE_PUBLIC_THREADS |
+  FLAGS.USE_EXTERNAL_STICKERS |
+  FLAGS.SEND_MESSAGES_IN_THREADS;
+
+export const PARTICIPANT_PERMISSIONS =
+  ADVISOR_PERMISSIONS |
+  FLAGS.USE_APPLICATION_COMMANDS;
 
 export class DiscordUtils {
   static async findGuildMember(client: Client, user: User): Promise<GuildMember | Error> {
@@ -24,29 +49,25 @@ export class DiscordUtils {
   }
 
   static mapPermissions(permissions: Permissions): string[] {
-    const permissionValues = [];
+    const permissionValues = { role: 'Custom', excessPermissionBits: permissions.bitfield };
 
     if ((permissions.bitfield & FLAGS.ADMINISTRATOR) === FLAGS.ADMINISTRATOR) {
-      permissionValues.push('Admin');
-      return permissionValues;
+      permissionValues.role = 'Admin';
+      return [permissionValues.role];
     } else if ((permissions.bitfield & PARTICIPANT_PERMISSIONS) === PARTICIPANT_PERMISSIONS) {
-      permissionValues.push('Participant');
-      permissionValues.push(permissions.bitfield ^ PARTICIPANT_PERMISSIONS);
+      permissionValues.role = 'Participant';
+      permissionValues.excessPermissionBits ^= PARTICIPANT_PERMISSIONS;
     } else if ((permissions.bitfield & ADVISOR_PERMISSIONS) === ADVISOR_PERMISSIONS) {
-      permissionValues.push('Advisor');
-      permissionValues.push(permissions.bitfield ^ ADVISOR_PERMISSIONS);
+      permissionValues.role = 'Advisor';
+      permissionValues.excessPermissionBits ^= ADVISOR_PERMISSIONS;
     } else if ((permissions.bitfield & OBSERVER_PERMISSIONS) === OBSERVER_PERMISSIONS) {
-      permissionValues.push('Observer');
-      permissionValues.push(permissions.bitfield ^ OBSERVER_PERMISSIONS);
-    } else {
-      permissionValues.push('Custom');
-      permissionValues.push(permissions.bitfield);
+      permissionValues.role = 'Observer';
+      permissionValues.excessPermissionBits ^= OBSERVER_PERMISSIONS;
     }
-  
-    const excessPermissionBits = permissionValues.pop() as bigint;
 
-    const excessPermissions = Object.keys(FLAGS).filter(f => (FLAGS[f as keyof PermissionFlags] & excessPermissionBits) !== BigInt(0)).map(f => f.toString());
+    const excessPermissions = Object.keys(FLAGS).filter(f =>
+      (FLAGS[f as keyof PermissionFlags] & permissionValues.excessPermissionBits) !== BigInt(0));
 
-    return [...permissionValues as string[], ...excessPermissions];
+    return [permissionValues.role, ...excessPermissions];
   }
 }

@@ -5,7 +5,8 @@ export const EmailValidator = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 export const AddressValidator = {
   parse: async (text: string): Promise<[string | Error, AddressCandidate | null]> => {
     const parts = text.split('\n');
-    if (parts.length !== 3) return [new Error(`Expected (3) lines, Received (${parts.length})`), null];
+    if (parts.length === 1) return [parts[0], { address: `Declined: ${Date.now()}`} as AddressCandidate];
+    if (parts.length !== 3) return [new Error(`Legal Name & Address:\n*{Legal Name}\n{Street Address}\n{Zip Code/City, State}\nThis will enable our bot to GeoCode your address and easily determine your Delaware legislators.`), null];
     if (parts[1].split(' ').length < 3) return [new Error('Street Address Expecting minimum: "{#} {Street} {Type}"'), null];
 
     const codedAddress = await GeoLookup.findAddress(parts.slice(1).join(', '));

@@ -5,13 +5,13 @@ import { ServerApiVersion } from 'mongodb';
 import { existsSync } from 'fs';
 import { join } from 'path';
 
-import { APIRouter } from './handlers/request/routers/APIRouter';
-import { BotRouter } from './handlers/request/routers/BotRouter';
-import { OAuthRouter } from './handlers/request/routers/OAuthRouter';
-import { WidgetRouter } from './handlers/request/routers/WidgetRouter';
+import { APIRouter } from './request/routers/APIRouter';
+import { BotRouter } from './request/routers/BotRouter';
+import { OAuthRouter } from './request/routers/OAuthRouter';
+import { WidgetRouter } from './request/routers/WidgetRouter';
 import { NPDBot } from './NPDBot';
 import { ErrorGenerator } from './utils/ErrorGenerator';
-import { Wrapper } from './handlers/request/Wrapper';
+import { Wrapper } from './request/Wrapper';
 
 const MONTH_MS = 1000 * 60 * 60 * 24 * 30;
 
@@ -31,15 +31,15 @@ export class NPDServer {
       connectionOptions: {
         serverApi: ServerApiVersion.v1
       }
-    }, error => error && ErrorGenerator.generate(error, 'Failed to connect to MongoDB Session Store:'));
-    mongoStore.on('error', error => ErrorGenerator.generate(error, 'Error from MongoDB Session Store:'));
+    }, error => error && ErrorGenerator.generate({ e: error, message: 'Failed to connect to MongoDB Session Store:' }));
+    mongoStore.on('error', error => ErrorGenerator.generate({ e: error, message: 'Error from MongoDB Session Store:' }));
 
     app.use((req, res, next) => {
       try {
         next();
       } catch (e) {
         res.status(503).json({
-          error: ErrorGenerator.generate(e, `Uncaught error in request handler:\n${req}`)
+          error: ErrorGenerator.generate({ e, message: `Uncaught error in request handler:\n${req}` })
         });
       }
     });
