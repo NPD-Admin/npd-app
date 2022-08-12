@@ -52,7 +52,7 @@ export default class Setup {
 
   private async completeSetup(): Promise<void> {
     if (this.botInstance.isActive) this.botInstance.client.user?.setActivity('with myself.  Under active development, responses may be unpredictable.');
-    else this.botInstance.client.user?.setActivity({ name: 'for commands...', type: ActivityTypes.LISTENING });
+    else this.botInstance.client.user?.setActivity({ name: 'commands...', type: ActivityTypes.LISTENING });
 
     await this.loadDefaultAssets();
     await this.loadConfigs();
