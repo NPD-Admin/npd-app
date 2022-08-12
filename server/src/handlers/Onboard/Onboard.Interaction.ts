@@ -1,7 +1,9 @@
 import { ButtonInteraction } from "discord.js";
 import { NPDBot } from "../../NPDBot";
-import { BotEvent, EventType } from "../../types/EventTypes";
-import { BaseHandler, HandlerConfig, IHandler } from "../../types/IHandler";
+import { BotEvent, EventType } from "../../types/events/EventType";
+import { BaseHandler } from "../../types/handlers/BaseHandler";
+import { HandlerConfig } from "../../types/handlers/configs/HandlerConfig";
+import { IHandler } from "../../types/handlers/IHandler";
 import { Onboard } from "./Onboard";
 
 export class OnboardInteraction extends BaseHandler implements IHandler {

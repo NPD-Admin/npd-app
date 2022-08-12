@@ -1,7 +1,7 @@
 import { CommandInteraction, Snowflake, TextChannel } from "discord.js";
 import { Collection, ObjectId, WithId } from "mongodb";
 import { BotConfig, NPDBot } from "../../NPDBot";
-import { TimerEvent } from "../../types/TimerEvent";
+import { TimerEvent } from "../../types/events/TimerEvent";
 import { ErrorGenerator } from "../../utils/ErrorGenerator";
 import { HTTPSRequest } from "../../utils/HTTPSRequest";
 import { MongoConnection } from "../../utils/MongoConnection";
@@ -23,17 +23,17 @@ type Tweet = {
   likedBy?: string;
 };
 
-export class TwitterTracker {
-  static trackers: Map<Snowflake,TwitterTracker> = new Map<Snowflake,TwitterTracker>();
+export class TwitterFeeder {
+  static trackers: Map<Snowflake,TwitterFeeder> = new Map<Snowflake,TwitterFeeder>();
   static botInstance: NPDBot;
 
-  static async getTracker(guildId: Snowflake): Promise<TwitterTracker> {
+  static async getTracker(guildId: Snowflake): Promise<TwitterFeeder> {
     const existing = this.trackers.get(guildId);
     if (existing) return existing;
 
     const config = await MongoConnection.getCollection('assets').findOne({ type: 'BotConfig', guildId: guildId }) as WithId<BotConfig>;
     
-    return this.trackers.set(guildId, new TwitterTracker(guildId, config)).get(guildId)!;
+    return this.trackers.set(guildId, new TwitterFeeder(guildId, config)).get(guildId)!;
   }
 
   static async addTracker(payload: CommandInteraction, account: string) {
@@ -53,9 +53,9 @@ export class TwitterTracker {
     if (payload instanceof CommandInteraction)
       payload.deferReply({ ephemeral: true });
     else {
-      const parts = (payload.id as string).split(':');
-      const guild = await TwitterTracker.botInstance.client.guilds.fetch(parts[1]);
-      const channel = await guild.channels.fetch(parts[2]);
+      const parts = (payload.id as string).split(':::')[1].split(':');
+      const guild = await TwitterFeeder.botInstance.client.guilds.fetch(parts[0]);
+      const channel = await guild.channels.fetch(parts[1]);
       if (channel?.type === 'GUILD_TEXT')
         (payload as TimerEvent & { channel: TextChannel }).channel = channel;
       else return ErrorGenerator.generate({ e: payload.id, message: 'Configured channel is not a text channel:' });

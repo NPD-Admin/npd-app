@@ -1,7 +1,8 @@
 import { ChatInputApplicationCommandData, CommandInteraction, GuildMember } from "discord.js";
 import { NPDBot } from "../../NPDBot";
-import { EventType } from "../../types/EventTypes";
-import { BaseHandler, IHandler } from "../../types/IHandler";
+import { EventType } from "../../types/events/EventType";
+import { BaseHandler } from "../../types/handlers/BaseHandler";
+import { IHandler } from "../../types/handlers/IHandler";
 import { Onboard } from "./Onboard";
 
 export class OnboardCommand extends BaseHandler implements IHandler {

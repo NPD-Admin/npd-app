@@ -1,6 +1,7 @@
 import { ApplicationCommandDataResolvable, ChatInputApplicationCommandData, CommandInteraction, EmbedField, EmbedFieldData, Message, MessagePayload, Snowflake } from "discord.js";
-import { EventType } from "../../types/EventTypes";
-import { BaseHandler, IHandler } from "../../types/IHandler";
+import { EventType } from "../../types/events/EventType";
+import { BaseHandler } from "../../types/handlers/BaseHandler";
+import { IHandler } from "../../types/handlers/IHandler";
 import { Asset } from "../../utils/AssetLoader";
 import { DiscordUtils } from "../../utils/DiscordUtils";
 import { MongoConnection } from "../../utils/MongoConnection";

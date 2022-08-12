@@ -1,7 +1,8 @@
 import { ApplicationCommandData, ApplicationCommandDataResolvable, CategoryChannel, ChatInputApplicationCommandData, Collection, CommandInteraction, GuildChannel, GuildMember, PermissionFlags, PermissionOverwriteOptions, PermissionOverwrites, Permissions, Role, Snowflake, TextChannel } from "discord.js";
 import { BotConfig } from "../../NPDBot";
-import { EventType } from "../../types/EventTypes";
-import { BaseHandler, IHandler } from "../../types/IHandler";
+import { EventType } from "../../types/events/EventType";
+import { BaseHandler } from "../../types/handlers/BaseHandler";
+import { IHandler } from "../../types/handlers/IHandler";
 import { DiscordUtils, FLAGS, ADVISOR_PERMISSIONS, OBSERVER_PERMISSIONS, PARTICIPANT_PERMISSIONS } from "../../utils/DiscordUtils";
 import { MongoConnection, WithId } from "../../utils/MongoConnection";
 

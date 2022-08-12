@@ -1,7 +1,8 @@
 import { ApplicationCommandDataResolvable, ChatInputApplicationCommandData, CommandInteraction } from "discord.js";
-import { BotEvent, EventType } from "../../types/EventTypes";
-import { BaseHandler, IHandler } from "../../types/IHandler";
-import { TwitterTracker } from "./TwitterFeeder";
+import { BotEvent, EventType } from "../../types/events/EventType";
+import { BaseHandler } from "../../types/handlers/BaseHandler";
+import { IHandler } from "../../types/handlers/IHandler";
+import { TwitterFeeder } from "./TwitterFeeder";
 
 export class TwitterFeederCommand extends BaseHandler implements IHandler {
   type: EventType = EventType.COMMAND;
@@ -19,7 +20,7 @@ export class TwitterFeederCommand extends BaseHandler implements IHandler {
   async callback(payload: CommandInteraction): Promise<any> {
     const account = payload.options.getString('account');
 
-    if (account) await TwitterTracker.addTracker(payload, account);
-    (await TwitterTracker.getTracker(payload.guildId!)).getTweets(payload);
+    if (account) await TwitterFeeder.addTracker(payload, account);
+    (await TwitterFeeder.getTracker(payload.guildId!)).getTweets(payload);
   }
 }

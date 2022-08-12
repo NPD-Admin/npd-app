@@ -1,9 +1,10 @@
 import { ApplicationCommandDataResolvable, ChatInputApplicationCommandData, CommandInteraction, MessagePayload, Snowflake } from "discord.js";
-import { EventType } from "../../types/EventTypes";
-import { BaseHandler, IHandler } from "../../types/IHandler";
+import { EventType } from "../../types/events/EventType";
+import { IHandler } from "../../types/handlers/IHandler";
 import { MongoConnection } from "../../utils/MongoConnection";
 import { Asset } from '../../utils/AssetLoader';
 import { DiscordUtils } from "../../utils/DiscordUtils";
+import { BaseHandler } from "../../types/handlers/BaseHandler";
 
 type DonateAsset = Asset & {
   guildId: Snowflake;

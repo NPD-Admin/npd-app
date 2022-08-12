@@ -1,10 +1,12 @@
 import { NPDBot } from "../../NPDBot";
-import { BotEvent, EventType } from "../../types/EventTypes";
-import { BaseHandler, IHandler, TimerConfig } from "../../types/IHandler";
-import { TimerEvent } from "../../types/TimerEvent";
-import { TwitterTracker } from "./TwitterFeeder";
+import { EventType } from "../../types/events/EventType";
+import { IHandler } from "../../types/handlers/IHandler";
+import { TimerEvent } from "../../types/events/TimerEvent";
+import { TwitterFeeder } from "./TwitterFeeder";
+import { BaseHandler } from "../../types/handlers/BaseHandler";
+import { TimerConfig } from "../../types/handlers/configs/TimerConfig";
 
-export class TwitterFeeder extends BaseHandler implements IHandler {
+export class TwitterFeederTimerEvent extends BaseHandler implements IHandler {
   type: EventType = EventType.TIMER;
   config: TimerConfig = {
     name: 'TwitterFeeder',
@@ -13,14 +15,14 @@ export class TwitterFeeder extends BaseHandler implements IHandler {
   };
 
   async init(instance: NPDBot): Promise<void> {
-    TwitterTracker.init(instance);
+    TwitterFeeder.init(instance);
     instance.configs.filter(c => c.twitterFeederChannelId).forEach(c => {
-      new TimerEvent(`twitter-feeder:${c.guildId}:${c.twitterFeederChannelId}`, this.config.frequency).timeCheck(e => this.callback(e))
+      new TimerEvent(this, { timerSuffix: `${c.guildId}:${c.twitterFeederChannelId}` }).run()
     });
   }
 
   async callback(payload: TimerEvent): Promise<any> {
     console.log(`Getting updated tweets with ${payload.id}`);
-    await (await TwitterTracker.getTracker((payload.id as string).split(':')[1])).getTweets(payload);
+    await (await TwitterFeeder.getTracker((payload.id as string).split(':::')[1].split(':')[0])).getTweets(payload);
   }
 }

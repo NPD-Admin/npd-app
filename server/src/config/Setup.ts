@@ -1,15 +1,19 @@
 import { ApplicationCommandData, ApplicationCommandDataResolvable, Client, DiscordAPIError, Guild, Snowflake, TextChannel } from 'discord.js';
+import { ActivityTypes } from 'discord.js/typings/enums';
 import { readdirSync, Dirent } from 'fs';
 import { join, normalize } from 'path';
 import { createHash } from 'crypto';
 
 import { BotConfig, NPDBot } from "../NPDBot";
-import { BaseHandler, HandlerConfig, IHandler, TimerConfig } from '../types/IHandler';
 import { MongoConnection, WithId } from '../utils/MongoConnection';
 import { AssetLoader } from '../utils/AssetLoader';
-import { GoogleClient } from '../utils/Google/GoogleClient';
-import { EventType, PresenceChange, Reaction } from '../types/EventTypes';
-import { ActivityTypes } from 'discord.js/typings/enums';
+import { EventType } from '../types/events/EventType';
+import { IHandler } from '../types/handlers/IHandler';
+import { HandlerConfig } from '../types/handlers/configs/HandlerConfig';
+import { TimerConfig } from '../types/handlers/configs/TimerConfig';
+import { BaseHandler } from '../types/handlers/BaseHandler';
+import { PresenceUpdate } from '../types/events/PresenceUpdate';
+import { Reaction } from '../types/events/Reaction';
 
 type CommandCache = {
   guildIds: Snowflake[];
@@ -45,7 +49,7 @@ export default class Setup {
     this.client.on('interactionCreate', interaction => this.botInstance.handle(interaction));
     this.client.on('messageCreate', message => this.botInstance.handle(message));
     this.client.on('guildMemberAdd', member => this.botInstance.handle(member));
-    this.client.on<'presenceUpdate'>('presenceUpdate', (o, n) => this.botInstance.handle(new PresenceChange(o, n)));
+    this.client.on<'presenceUpdate'>('presenceUpdate', (o, n) => this.botInstance.handle(new PresenceUpdate(o, n)));
     this.client.on<'messageReactionAdd'>('messageReactionAdd', (r, u) => this.botInstance.handle(new Reaction(r, u)));
     this.client.on<'messageReactionRemove'>('messageReactionRemove', (r, u) => this.botInstance.handle(new Reaction(r, u)));
   }

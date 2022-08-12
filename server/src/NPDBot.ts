@@ -1,12 +1,13 @@
-import { Client, CommandInteraction, Guild, Interaction, Snowflake, TextChannel } from 'discord.js';
+import { Client, Guild, Interaction, Snowflake, TextChannel } from 'discord.js';
 
 import Setup from './config/Setup';
 
 import { INTENTS as intents, PARTIALS as partials } from './config/ClientConfig';
-import { BaseHandler, IHandler } from './types/IHandler';
-import { BotEvent } from './types/EventTypes';
+import { IHandler } from './types/handlers/IHandler';
+import { BotEvent } from './types/events/EventType';
 import { WithId } from './utils/MongoConnection';
 import { ErrorGenerator } from './utils/ErrorGenerator';
+import { BaseHandler } from './types/handlers/BaseHandler';
 
 export type BotConfig = {
   type: 'BotConfig';
@@ -45,9 +46,11 @@ export class NPDBot {
   private async interactionErrorHandler(interaction: Interaction, result: void | Error[]): Promise<void> {
     if (interaction.isRepliable() && !interaction.replied) {
       if ((result instanceof Array<Error>) && (result as Array<Error>).length && result.some(c => c)) {
-        await interaction.reply({ ephemeral: true, content: `Encountered error(s) processing interaction:\n${result.map(e => e && e.message).join('\n\n')}` });
-      } else if (!(interaction instanceof CommandInteraction)) {
-        await interaction.reply({ ephemeral: true, content: 'This interaction is not being handled at this time.' });
+        await interaction.reply({ ephemeral: true, content: `Encountered error(s) processing interaction:\n${result.map(e => e && e.message).join('\n\n')}` })
+          .catch(console.error);
+      } else {
+        await interaction.reply({ ephemeral: true, content: 'This interaction is not being handled at this time.' })
+          .catch(console.error);
         console.error('Unhandled Interaction:\n', interaction);
       }
     }

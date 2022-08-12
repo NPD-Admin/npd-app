@@ -1,9 +1,11 @@
 import { Message } from 'discord.js';
 
-import { EventType } from '../../types/EventTypes';
-import { BaseHandler, HandlerConfig, IHandler } from '../../types/IHandler';
+import { EventType } from '../../types/events/EventType';
+import { BaseHandler } from '../../types/handlers/BaseHandler';
+import { HandlerConfig } from '../../types/handlers/configs/HandlerConfig';
+import { IHandler } from '../../types/handlers/IHandler';
 
-export class Ping extends BaseHandler implements IHandler {
+export class PingMessage extends BaseHandler implements IHandler {
   config: HandlerConfig = {
     name: 'ping',
     description: 'Responds to `ping` message.'

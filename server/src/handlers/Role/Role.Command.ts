@@ -1,7 +1,8 @@
 import { ApplicationCommandDataResolvable, ChatInputApplicationCommandData, Collection, CommandInteraction, GuildChannel, GuildMember, Role, Snowflake } from "discord.js";
 import { BotConfig } from "../../NPDBot";
-import { BotEvent, EventType } from "../../types/EventTypes";
-import { BaseHandler, IHandler } from "../../types/IHandler";
+import { BotEvent, EventType } from "../../types/events/EventType";
+import { BaseHandler } from "../../types/handlers/BaseHandler";
+import { IHandler } from "../../types/handlers/IHandler";
 import { DiscordUtils } from "../../utils/DiscordUtils";
 import { MongoConnection, WithId } from "../../utils/MongoConnection";
 

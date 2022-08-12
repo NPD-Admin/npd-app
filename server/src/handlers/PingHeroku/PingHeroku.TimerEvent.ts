@@ -1,20 +1,23 @@
 import { NPDBot } from "../../NPDBot";
-import { BotEvent, EventType } from "../../types/EventTypes";
-import { BaseHandler, IHandler } from "../../types/IHandler";
-import { TimerEvent } from "../../types/TimerEvent";
+import { BotEvent, EventType } from "../../types/events/EventType";
+import { IHandler } from "../../types/handlers/IHandler";
+import { TimerEvent } from "../../types/events/TimerEvent";
 import { ErrorGenerator } from "../../utils/ErrorGenerator";
 import { HTTPSRequest } from "../../utils/HTTPSRequest";
+import { BaseHandler } from "../../types/handlers/BaseHandler";
+import { TimerConfig } from "../../types/handlers/configs/TimerConfig";
 
 export class PingHerokuTimer extends BaseHandler implements IHandler {
-  config = {
+  config: TimerConfig = {
     name: 'PingHerokuTimer',
-    description: 'Pings Heroku Server so it doesn\'t fall asleep.'
+    description: 'Pings Heroku Server so it doesn\'t fall asleep.',
+    frequency: 300000
   }
 
   type: EventType = EventType.TIMER;
 
   async init(i: NPDBot): Promise<void> {
-    new TimerEvent('PingHerokuTimer', 300000).timeCheck((e) => this.callback(e));
+    new TimerEvent(this).run();
   }
 
   async callback(payload: BotEvent): Promise<any> {

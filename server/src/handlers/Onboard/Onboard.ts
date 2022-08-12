@@ -20,8 +20,8 @@ import {
 } from "discord.js";
 
 import { NPDBot } from "../../NPDBot";
-import { BotEvent } from "../../types/EventTypes";
-import { TimerEvent } from "../../types/TimerEvent";
+import { BotEvent } from "../../types/events/EventType";
+import { TimerEvent } from "../../types/events/TimerEvent";
 import { DiscordUtils } from "../../utils/DiscordUtils";
 import { ErrorGenerator } from "../../utils/ErrorGenerator";
 import { GoogleClient } from "../../utils/Google/GoogleClient";
@@ -371,7 +371,7 @@ export class Onboard {
 
   private async updateGuildMember(): Promise<void> {
     const guildMember = this.guildMember!, config = this.config!, memberRecord = this.memberRecord!;
-    if (memberRecord.completed) {
+    if (memberRecord.completed && guildMember.roles.resolve(config.guestRoleId)) {
       await guildMember.roles.add(config.completedRoleId);
       await guildMember.roles.remove(config.guestRoleId);
     }
@@ -565,10 +565,11 @@ export class Onboard {
     await command.reply({ ...msg, ephemeral: !command.options.getBoolean('public') });
   }
   
-  static async assignGuestRole(payload: BotEvent): Promise<void> {
-    const member = payload as GuildMember;
+  static async assignGuestRole(member: GuildMember): Promise<void> {
     const config = await Onboard.assetCollection.findOne({ type: 'OnboardingConfig', guildId: member.guild!.id }) as WithId<OnboardingConfig>;
-    await member.roles.add(config.guestRoleId);
+    const alreadyJoined = await Onboard.memberCollection.findOne({ discordUserId: member.user.id });
+    if (!alreadyJoined) await member.roles.add(config.guestRoleId);
+    else await this.botInstance.getConfig(member.guild.id)?.logChannel?.send(`<@${member.id} rejoined the server.`);
   }
 
   static async getPromptTimes(): Promise<Map<Snowflake, string>> {

@@ -1,8 +1,9 @@
-import { ApplicationCommandDataResolvable, ChatInputApplicationCommandData, CommandInteraction } from "discord.js";
-import { BotEvent, EventType } from "../../types/EventTypes";
-import { BaseHandler, IHandler } from "../../types/IHandler";
+import { ChatInputApplicationCommandData, CommandInteraction } from "discord.js";
+import { EventType } from "../../types/events/EventType";
+import { BaseHandler } from "../../types/handlers/BaseHandler";
+import { IHandler } from "../../types/handlers/IHandler";
 
-export class Sock extends BaseHandler implements IHandler {
+export class SockCommand extends BaseHandler implements IHandler {
   type: EventType = EventType.COMMAND;
   config: ChatInputApplicationCommandData = {
     name: 'sock',

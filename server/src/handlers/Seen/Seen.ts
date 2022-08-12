@@ -1,7 +1,8 @@
 import { CommandInteraction, GuildMember, Message, Role, Snowflake } from "discord.js";
 import { Collection, WithId } from "mongodb";
 import { NPDBot } from "../../NPDBot";
-import { PresenceChange, Reaction } from "../../types/EventTypes";
+import { PresenceUpdate } from "../../types/events/PresenceUpdate";
+import { Reaction } from "../../types/events/Reaction";
 import { ErrorGenerator } from "../../utils/ErrorGenerator";
 import { MongoConnection } from "../../utils/MongoConnection";
 
@@ -12,7 +13,7 @@ type SeenData = {
   seenData?: string;
 };
 
-export class SeenTracker {
+export class Seen {
   static botInstance: NPDBot;
   static presenceCollection: Collection;
   
@@ -23,10 +24,10 @@ export class SeenTracker {
     this.presenceCollection = MongoConnection.getCollection('presence');
   }
 
-  static async update(change: PresenceChange | Message | Reaction): Promise<any> {
+  static async update(change: PresenceUpdate | Message | Reaction): Promise<any> {
     const payload = (change instanceof Message && { userId: change.author.id, guildId: change.guildId })
       || (change instanceof Reaction && { userId: change.u.id, guildId: change.r.message.guildId })
-      || (change instanceof PresenceChange
+      || (change instanceof PresenceUpdate
           && ((change.n.status === 'online' || change.o?.status === 'online' && { userId: change.n.userId, guildId: change.n.guild?.id })
             || true))
       || ErrorGenerator.generate({ e: change, message: 'Invalid SeenTracker update:' });

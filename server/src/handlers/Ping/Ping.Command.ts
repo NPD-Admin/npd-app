@@ -1,9 +1,10 @@
 import { ApplicationCommandDataResolvable, ChatInputApplicationCommandData, CommandInteraction } from 'discord.js';
 
-import { EventType } from '../../types/EventTypes';
-import { BaseHandler, IHandler } from '../../types/IHandler';
+import { EventType } from '../../types/events/EventType';
+import { BaseHandler } from '../../types/handlers/BaseHandler';
+import { IHandler } from '../../types/handlers/IHandler';
 
-export class Ping extends BaseHandler implements IHandler {
+export class PingCommand extends BaseHandler implements IHandler {
   config: ChatInputApplicationCommandData = {
     name: 'ping',
     description: 'pong'

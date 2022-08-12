@@ -1,8 +1,9 @@
 import { ApplicationCommandDataResolvable, ContextMenuInteraction, MessageApplicationCommandData, MessageContextMenuInteraction } from "discord.js";
-import { EventType } from "../../types/EventTypes";
-import { BaseHandler, IHandler } from "../../types/IHandler";
+import { EventType } from "../../types/events/EventType";
+import { BaseHandler } from "../../types/handlers/BaseHandler";
+import { IHandler } from "../../types/handlers/IHandler";
 
-export class MotionCommand extends BaseHandler implements IHandler {
+export class MotionMessageCommand extends BaseHandler implements IHandler {
   type: EventType = EventType.COMMAND;
   config: MessageApplicationCommandData = {
     name: 'Motion',
